@@ -198,7 +198,7 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
     <aside aria-label="إجراءات التقرير">
       <div class="side-info">
         <h3>اكتمل <span dir="ltr" id="pctTxt">0%</span> من التقرير</h3>
-        <p class="ai-note">التعبئة الذكية تملأ الخانات الفارغة فقط، ولا تغيّر ما كتبته.</p>
+        <p class="ai-note">التعبئة الذكية تملأ الخانات الفارغة فقط ولا تغيّر ما كتبته، وترسل العنوان والتخصص والصف فقط.</p>
         <p>تُحفظ بياناتك على هذا الجهاز، وتحتاج إلى فتح الصفحة على كل جهاز على حدة.</p>
       </div>
       <div class="actions">
@@ -243,6 +243,8 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 (function(){
 'use strict';
 var KEY='teacher-reports:v1', MAXIMG=4;
+/* Address of the Cloudflare Worker that relays AI requests. Leave empty to hide the AI button outside Claude. */
+var AI_ENDPOINT='';
 var $=function(s,r){return (r||document).querySelector(s);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 
@@ -495,6 +497,14 @@ function setVal(key,val){
   S.t[S.tab].v[key]=val;
   var el=$('#t-'+key);if(el){el.value=val;}
 }
+async function askAI(prompt){
+  if(caps.ai){return await caps.ai.json(prompt,{modelTier:'quick'});}
+  var res=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
+  if(!res.ok){var er=new Error('http '+res.status);er.code=res.status===429?'rate_limited':'failed';throw er;}
+  var d=await res.json(),t=String(d.text||''),a=t.indexOf('{'),b=t.lastIndexOf('}');
+  if(a<0||b<=a){var e2=new Error('bad answer');e2.code='failed';throw e2;}
+  return JSON.parse(t.slice(a,b+1));
+}
 async function aiFill(){
   var k=S.tab,T=TABS[k],v=S.t[k].v;
   if(!String(v.topic||'').trim()){
@@ -502,7 +512,7 @@ async function aiFill(){
     var f=$('#t-topic');if(f){f.focus();}return;
   }
   await capsReady;
-  if(!caps.ai){toast('التعبئة الذكية غير متاحة في هذا العرض.');return;}
+  if(!caps.ai&&!AI_ENDPOINT){toast('التعبئة الذكية غير متاحة في هذا العرض.');return;}
   var btns=Array.prototype.slice.call(document.querySelectorAll('[data-act="ai"]'));
   busy(btns,true);toast('جارٍ التعبئة...');
   var spec=T.sections.filter(function(s){return s.ai;}).map(function(s){
@@ -516,7 +526,7 @@ async function aiFill(){
     'أعد كائن JSON فقط بلا شرح وبلا علامات كود، وفيه المفاتيح التالية:\n'+spec+'\n'+
     'كل عبارة بحد أقصى 5 كلمات، بالعربية الفصحى المبسطة، بلا علامات ترقيم في النهاية، وبلا تكرار بين العبارات.';
   try{
-    var r=await caps.ai.json(prompt,{modelTier:'quick'});
+    var r=await askAI(prompt);
     var n=0;
     if(r&&typeof r==='object'){
       T.sections.forEach(function(s){
@@ -618,12 +628,12 @@ async function addImages(files){
 /* ---------- wiring ---------- */
 var capsReady=(async function(){
   var C=window.claude;
-  if(!C||!C.use){document.body.classList.add('no-ai');return;}
+  if(!C||!C.use){document.body.classList.toggle('no-ai',!AI_ENDPOINT);return;}
   try{
     var r=await Promise.all([C.use('downloads').catch(function(){return null;}),C.use('sample').catch(function(){return null;})]);
     caps.dl=r[0];caps.ai=r[1];
   }catch(e){}
-  document.body.classList.toggle('no-ai',!caps.ai);
+  document.body.classList.toggle('no-ai',!caps.ai&&!AI_ENDPOINT);
 })();
 
 document.addEventListener('input',function(e){
