@@ -244,7 +244,7 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 'use strict';
 var KEY='teacher-reports:v1', MAXIMG=4;
 /* Address of the Cloudflare Worker that relays AI requests. Leave empty to hide the AI button outside Claude. */
-var AI_ENDPOINT='';
+var AI_ENDPOINT='https://teacher-reports-ai.taj-academy.workers.dev/';
 var $=function(s,r){return (r||document).querySelector(s);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 
