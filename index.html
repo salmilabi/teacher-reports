@@ -2,8 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تقارير المعلم</title>
+<meta name="theme-color" content="#2D4A9E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="تقارير المعلم">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -33,7 +40,8 @@
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--font-body);-webkit-text-size-adjust:100%}
-button,input,select{font:inherit;color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
 svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -44,7 +52,7 @@ header.top h1{margin:0;font:800 24px/1.3 var(--font-display);text-wrap:balance}
 header.top p{margin:2px 0 0;color:var(--muted);font-size:14px}
 
 .tabbar{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0 8px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
 .tab{min-height:44px;border:0;background:transparent;border-radius:9px;font:700 15px var(--font-display);color:var(--muted);cursor:pointer}
 .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
 .progress{height:4px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden}
@@ -55,7 +63,9 @@ header.top p{margin:2px 0 0;color:var(--muted);font-size:14px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
 .card h2,.card summary{margin:0 0 12px;font:700 17px/1.4 var(--font-display);display:flex;align-items:center;gap:8px}
 .card h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--accent);flex:none}
+.card h2{flex-wrap:wrap}
 .card h2 small{font:400 13px var(--font-body);color:var(--muted)}
+@media (max-width:559px){.card h2 small{flex:1 1 100%;margin-top:-4px}}
 details.card summary{cursor:pointer;margin:0;list-style:none;justify-content:space-between}
 details.card summary::-webkit-details-marker{display:none}
 details.card summary span{display:flex;align-items:center;gap:8px}
@@ -71,7 +81,7 @@ details.card[open] summary{margin-bottom:12px}
 .field.wide{grid-column:1/-1}
 label.l{display:block;font:500 13px var(--font-body);color:var(--muted);margin-bottom:4px}
 .field small{display:block;color:var(--muted);font-size:13px;margin-top:4px;min-height:1px}
-input[type=text],input[type=number],input[type=date],select{width:100%;min-height:46px;padding:8px 12px;font-size:16px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;min-height:46px;padding:8px 12px;font-size:16px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px}
 input::placeholder{color:var(--muted);opacity:.65}
 input[type=number]{text-align:right}
 .field.key.empty input{border-color:var(--key);background:var(--key-soft)}
@@ -105,7 +115,7 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 .abtn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .abtn[disabled]{opacity:.6;cursor:progress}
 .l-long{display:none}
-.no-ai [data-act="ai"]{display:none}
+.no-ai [data-act="ai"],.no-ai .cellai,.no-ai [data-act="book"]{display:none}
 @media (min-width:960px){
   .layout{grid-template-columns:minmax(0,1fr) 300px;align-items:start;padding-bottom:48px}
   aside{position:sticky;top:96px;left:auto;right:auto;bottom:auto;border:1px solid var(--line);border-radius:14px;padding:16px}
@@ -137,7 +147,7 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 #sheetHolder{position:fixed;top:0;left:-12000px;width:794px;pointer-events:none}
 
 /* Printed sheet: fixed light colors, independent of the page theme */
-.sheet{width:794px;background:#fff;color:#16202B;padding:34px 40px 30px;font:400 14px/1.55 Tajawal,sans-serif;direction:rtl;text-align:right}
+.sheet{width:794px;background:#fff;color:#16202B;padding:20px 40px 24px;font:400 14px/1.55 Tajawal,sans-serif;direction:rtl;text-align:right}
 .sheet *{box-sizing:border-box}
 .sh-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:3px solid #2D4A9E;padding-bottom:10px;margin-bottom:12px}
 .sh-title{font:800 26px/1.2 Cairo,Tajawal,sans-serif;color:#16202B}
@@ -163,48 +173,170 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 .sh-sign b{color:#5A6672;font-weight:500}
 
 @media (prefers-reduced-motion:reduce){.progress>i,#toast{transition:none}}
+
+
+/* ---- v2: views, profiles, archive, dashboard, settings ---- */
+.top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.profsw select{min-height:40px;width:auto;max-width:190px;font-size:14px}
+nav.views{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;margin:10px 0 0}
+.vbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border:0;background:transparent;border-radius:9px;font:700 13px var(--font-display);color:var(--muted);cursor:pointer}
+.vbtn[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+@media (min-width:560px){.vbtn{flex-direction:row;gap:8px;font-size:14px}}
+.tab{padding:0 4px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab svg.i{width:16px;height:16px}
+.tab.more{min-width:0}
+body:not([data-view="edit"]) .tabbar,body:not([data-view="edit"]) aside{display:none}
+body:not([data-view="edit"]) .layout{padding-bottom:40px;grid-template-columns:minmax(0,1fr)}
+.abtn.desk-only{display:none}
+@media (min-width:960px){.abtn.desk-only{display:flex}.btn.desk-hide{display:none}}
+
+textarea{display:block;resize:vertical;line-height:1.7;min-height:120px}
+.muted{color:var(--muted)}
+.card p.muted{margin:0 0 12px;font-size:14px}
+.pad{padding:12px}
+.center{justify-content:center}
+.empty-state{text-align:center;color:var(--muted)}
+.empty-state p{margin:0}
+.btn.accent{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.btn.mini{min-height:40px;padding:0 12px;font-size:13px}
+label.btn{cursor:pointer}
+.tools .btnrow{align-items:stretch}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sec-head h2{margin:0}
+.row input{flex:1;min-width:0}
+.cellai{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--accent);display:grid;place-items:center;cursor:pointer}
+.cellai:hover{border-color:var(--accent);background:var(--accent-soft)}
+.cellai[disabled]{opacity:.5;cursor:progress}
+
+.card.list{padding:4px 16px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.it-main{min-width:0}
+.it-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.it-top b{font:700 15px var(--font-display)}
+.it-meta{color:var(--muted);font-size:13px;margin-top:2px}
+.it-act{display:flex;gap:6px;flex:none}
+@media (max-width:559px){.item{flex-direction:column;align-items:stretch}}
+.chip{display:inline-block;padding:1px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font:700 12px var(--font-display)}
+.chip.on{background:var(--key-soft);color:var(--ink);box-shadow:inset 0 0 0 1px var(--key)}
+.chip.big{font-size:14px;padding:6px 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:var(--accent-soft);border-radius:12px;padding:12px;text-align:center}
+.stat b{display:block;font:800 26px/1.3 var(--font-display);color:var(--accent)}
+.stat span{font-size:13px;color:var(--muted)}
+.chart{width:100%;max-width:560px;height:auto;display:block;margin:0 auto;direction:ltr}
+.chart .ax{stroke:var(--line);stroke-width:1.5}
+.chart .gl{stroke:var(--line);stroke-dasharray:3 4}
+.chart .tx{fill:var(--muted);font:11px Tajawal,sans-serif}
+.chart .tv{fill:var(--ink);font:700 11px Cairo,sans-serif}
+.chart .bar{fill:var(--accent)}
+.chart .bar0{fill:var(--line)}
+.rank{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.rank li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px}
+.rank b{color:var(--accent);font-family:var(--font-display)}
+
+.idents{display:grid;gap:14px}
+.ident{display:flex;gap:12px;align-items:center}
+.ident-prev{width:84px;height:84px;flex:none;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;color:var(--muted);background:#fff;overflow:hidden}
+.ident-prev img{max-width:100%;max-height:100%;object-fit:contain}
+.ident-info b{display:block;font:700 15px var(--font-display)}
+.ident-info small{display:block;color:var(--muted);margin-bottom:6px}
+
+.modal.wide{max-width:560px;padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:88vh}
+.pickbody{overflow:auto;padding:4px 8px}
+.pitem{display:flex;gap:10px;align-items:center;width:100%;padding:12px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:right;cursor:pointer;font:inherit}
+.pitem:hover{background:var(--accent-soft)}
+.pitem b{font:700 15px var(--font-display);font-weight:700}
+.pitem small{display:block;color:var(--muted);font-size:13px}
+.pitem input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--accent)}
+.pickfoot{padding:12px;border-top:1px solid var(--line)}
+
+.sync-code{direction:ltr;font:700 20px/1.4 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;padding:12px;background:var(--accent-soft);border-radius:10px;text-align:center;user-select:all;overflow-wrap:anywhere;margin-bottom:12px}
+.sync-join{display:flex;gap:8px;margin-top:10px}
+.sync-join input{direction:ltr;text-transform:uppercase;letter-spacing:.05em}
+.sync-msg{margin:10px 0 0;font-size:14px;color:var(--muted)}
+.sync-msg.err{color:var(--danger)}
+.sync-msg.ok{color:var(--ok)}
+
+/* printed sheet: identity images */
+.sh-brand{display:flex;align-items:center;gap:12px}
+.sh-logo{height:64px;max-width:130px;object-fit:contain;display:block}
+.sh-sign div{position:relative}
+.sh-sig{height:46px;max-width:150px;object-fit:contain;vertical-align:middle;margin-inline-start:6px}
+.sh-stamp{height:62px}
+
 </style>
 </head>
-<body>
+<body data-view="edit">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7.5 11L12 15.5 16.5 11M5 20h14"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V5M7.5 9L12 4.5 16.5 9M5 20h14"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
   <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 001.7 3h10.6a2 2 0 001.7-3l-5-9V3"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6V3z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><path d="M4 20L16 8M14 6l4 4M18 3v3M16.5 4.5h3M6 5v2M5 6h2"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5a3 3 0 010 6M18 14c2.2.6 3.5 2.8 3.5 6"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 8a8 8 0 00-14-2M4 4v4h4M4 16a8 8 0 0014 2M20 20v-4h-4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
 </svg>
 
 <div class="wrap">
   <header class="top">
-    <h1>تقارير المعلم</h1>
-    <p>تقرير يومي وأسبوعي وشهري جاهز للطباعة، يُحفظ تلقائيًا على هذا الجهاز.</p>
+    <div class="top-row">
+      <div>
+        <h1>تقارير المعلم</h1>
+        <p id="subLine">تقارير جاهزة للطباعة، تُحفظ تلقائيًا على هذا الجهاز.</p>
+      </div>
+      <div class="profsw">
+        <label class="sr" for="profSel">الملف الحالي</label>
+        <select id="profSel" aria-label="الملف الحالي"></select>
+      </div>
+    </div>
   </header>
 
-  <div class="tabbar">
-    <div class="tabs" role="tablist" aria-label="نوع التقرير">
-      <button class="tab" role="tab" id="tab-daily" data-tab="daily" aria-controls="form" aria-selected="true">اليومي</button>
-      <button class="tab" role="tab" id="tab-weekly" data-tab="weekly" aria-controls="form" aria-selected="false">الأسبوعي</button>
-      <button class="tab" role="tab" id="tab-monthly" data-tab="monthly" aria-controls="form" aria-selected="false">الشهري</button>
-    </div>
+  <nav class="views" aria-label="أقسام الصفحة">
+    <button type="button" class="vbtn" data-view="edit" aria-current="page"><svg class="i"><use href="#i-edit"/></svg><span>التقرير</span></button>
+    <button type="button" class="vbtn" data-view="archive"><svg class="i"><use href="#i-folder"/></svg><span>الأرشيف</span></button>
+    <button type="button" class="vbtn" data-view="dash"><svg class="i"><use href="#i-chart"/></svg><span>الإنجاز</span></button>
+    <button type="button" class="vbtn" data-view="settings"><svg class="i"><use href="#i-gear"/></svg><span>الإعدادات</span></button>
+  </nav>
+
+  <div class="tabbar" id="tabbar">
+    <div class="tabs" role="tablist" aria-label="نوع التقرير" id="tabs"></div>
     <div class="progress" role="progressbar" aria-label="اكتمال التقرير" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="bar"></i></div>
   </div>
 
   <main class="layout">
-    <div class="stack" id="form" role="tabpanel"></div>
+    <div class="stack" id="form"></div>
 
-    <aside aria-label="إجراءات التقرير">
+    <aside aria-label="إجراءات التقرير" id="actions">
       <div class="side-info">
         <h3>اكتمل <span dir="ltr" id="pctTxt">0%</span> من التقرير</h3>
         <p class="ai-note">التعبئة الذكية تملأ الخانات الفارغة فقط ولا تغيّر ما كتبته، وترسل العنوان والتخصص والصف فقط.</p>
-        <p>تُحفظ بياناتك على هذا الجهاز، وتحتاج إلى فتح الصفحة على كل جهاز على حدة.</p>
+        <p class="save-note" id="saveNote">يُحفظ التقرير تلقائيًا في الأرشيف على هذا الجهاز.</p>
       </div>
       <div class="actions">
         <button class="abtn primary" data-act="ai" id="aiBtn"><svg class="i"><use href="#i-ai"/></svg><span class="l-long">تعبئة الخانات الفارغة بالذكاء</span><span class="l-short">تعبئة ذكية</span></button>
         <button class="abtn" data-act="preview"><svg class="i"><use href="#i-eye"/></svg><span class="l-long">معاينة الورقة قبل التنزيل</span><span class="l-short">معاينة</span></button>
-        <button class="abtn" data-act="pdf" id="pdfBtn"><svg class="i"><use href="#i-down"/></svg><span class="l-long">تنزيل ملف PDF للطباعة</span><span class="l-short">تنزيل الملف</span></button>
+        <button class="abtn" data-act="pdf" id="pdfBtn"><svg class="i"><use href="#i-down"/></svg><span class="l-long">تنزيل ملف PDF للطباعة</span><span class="l-short">تنزيل</span></button>
+        <button class="abtn" data-act="share"><svg class="i"><use href="#i-share"/></svg><span class="l-long">مشاركة (واتساب وغيره)</span><span class="l-short">مشاركة</span></button>
+        <button class="abtn desk-only" data-act="docx"><svg class="i"><use href="#i-doc"/></svg><span class="l-long">تنزيل ملف وورد للتعديل</span></button>
       </div>
     </aside>
   </main>
@@ -215,11 +347,22 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
 <div class="overlay" id="dlg" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dlgT">
     <h3 id="dlgT">حذف بيانات التقرير؟</h3>
-    <p id="dlgP">ستُحذف حقول هذا التقرير وصوره. بيانات المدرسة والمعلم تبقى كما هي.</p>
+    <p id="dlgP">ستُحذف حقول هذا التقرير وصوره.</p>
     <div class="btnrow">
-      <button class="btn danger" data-dlg="ok" id="dlgOk">حذف البيانات</button>
+      <button class="btn danger" data-dlg="ok" id="dlgOk">حذف</button>
       <button class="btn" data-dlg="cancel">إلغاء</button>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="pick" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="pickT">
+    <div class="pvhead">
+      <h3 id="pickT">اختيار</h3>
+      <button class="btn" data-pickclose aria-label="إغلاق"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="pickbody" id="pickBody"></div>
+    <div class="btnrow pickfoot" id="pickFoot" hidden><button class="btn primary" id="pickOk" type="button">إضافة المحدد</button></div>
   </div>
 </div>
 
@@ -228,7 +371,8 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
     <div class="pvhead">
       <h3 id="pvT">معاينة الورقة</h3>
       <div class="btnrow">
-        <button class="btn primary" data-act="pdf"><svg class="i"><use href="#i-down"/></svg>تنزيل الملف</button>
+        <button class="btn primary" data-act="pdf"><svg class="i"><use href="#i-down"/></svg>تنزيل</button>
+        <button class="btn" data-act="share"><svg class="i"><use href="#i-share"/></svg>مشاركة</button>
         <button class="btn" data-pvclose id="pvClose" aria-label="إغلاق المعاينة"><svg class="i"><use href="#i-x"/></svg></button>
       </div>
     </div>
@@ -236,30 +380,97 @@ aside{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface
   </div>
 </div>
 
+<input class="sr" type="file" id="bookFile" accept="image/*" capture="environment" tabindex="-1">
+<input class="sr" type="file" id="restoreFile" accept="application/json,.json" tabindex="-1">
+<input class="sr" type="file" id="imgFile" accept="image/*" tabindex="-1">
+
 <div id="sheetHolder" aria-hidden="true"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 (function(){
 'use strict';
-var KEY='teacher-reports:v1', MAXIMG=4;
-/* Address of the Cloudflare Worker that relays AI requests. Leave empty to hide the AI button outside Claude. */
+var MAXIMG=4;
+var LEGACY_KEY='teacher-reports:v1';
+/* Address of the Cloudflare Worker that relays AI requests and encrypted sync blobs. Leave empty to hide those features outside Claude. */
 var AI_ENDPOINT='https://teacher-reports-ai.taj-academy.workers.dev/';
-var $=function(s,r){return (r||document).querySelector(s);};
-var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var SYNC_ENDPOINT=AI_ENDPOINT?AI_ENDPOINT+'sync':'';
+var CDN={
+  html2pdf:'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+  jszip:'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'
+};
 
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>';}
+
+/* ---------- dates ---------- */
+function pad(n){return String(n).padStart(2,'0');}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function today(){return iso(new Date());}
+function parseISO(s){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?new Date(+m[1],+m[2]-1,+m[3],12):null;}
+function fmt(loc,o,dt){try{return new Intl.DateTimeFormat(loc,o).format(dt);}catch(e){return '';}}
+function dates(s){
+  var dt=parseISO(s);if(!dt){return null;}
+  return {
+    w:fmt('ar-SA-u-ca-gregory',{weekday:'long'},dt),
+    h:fmt('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'},dt),
+    g:fmt('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'long',year:'numeric'},dt)
+  };
+}
+function shortHijri(s){var dt=parseISO(s);return dt?fmt('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long'},dt):'';}
+function addDays(s,n){var d=parseISO(s);if(!d){return s;}d.setDate(d.getDate()+n);return iso(d);}
+function numOf(x){if(x==null||String(x).trim()===''){return null;}var n=Number(x);return isNaN(n)?null:n;}
+function avgOf(a){return a.length?Math.round(a.reduce(function(x,y){return x+y;},0)/a.length):null;}
+/* The school week runs Sunday to Saturday here; reports are grouped by it. */
+function weekRange(s){
+  var d=parseISO(s);if(!d){return null;}
+  var a=new Date(d);a.setDate(d.getDate()-d.getDay());
+  var b=new Date(a);b.setDate(a.getDate()+6);
+  return [iso(a),iso(b)];
+}
+function hijriKey(s){
+  var d=parseISO(s);if(!d){return '';}
+  try{
+    var o={};
+    new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura-nu-latn',{year:'numeric',month:'numeric',day:'numeric'}).formatToParts(d).forEach(function(x){o[x.type]=x.value;});
+    return o.year+'-'+o.month;
+  }catch(e){return String(s).slice(0,7);}
+}
+function hijriMonthName(s){var d=parseISO(s);return d?fmt('ar-SA-u-ca-islamic-umalqura-nu-latn',{month:'long'},d):'';}
+
+var timer=null;
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(timer);timer=setTimeout(function(){t.classList.remove('on');},3400);}
+
+function loadScript(url){
+  return new Promise(function(res,rej){
+    var s=document.createElement('script');s.src=url;s.onload=function(){res();};s.onerror=function(){rej(new Error('load '+url));};
+    document.head.appendChild(s);
+  });
+}
+var libs={};
+function needLib(name){
+  var test={html2pdf:function(){return window.html2pdf;},jszip:function(){return window.JSZip;}}[name];
+  if(test()){return Promise.resolve();}
+  if(!libs[name]){libs[name]=loadScript(CDN[name]).catch(function(e){libs[name]=null;throw e;});}
+  return libs[name];
+}
+
+/* ---------- configuration ---------- */
+var TERMS=['الفصل الدراسي الأول','الفصل الدراسي الثاني'];
 var PROFILE=[
   {id:'eduDept',label:'إدارة التعليم',ph:'إدارة تعليم المنطقة'},
   {id:'school',label:'اسم المدرسة',ph:'المدرسة المتوسطة'},
   {id:'spec',label:'التخصص',ph:'رياضيات'},
-  {id:'term',label:'الفصل الدراسي',type:'select',opts:['الفصل الدراسي الأول','الفصل الدراسي الثاني','الفصل الدراسي الثالث']},
+  {id:'term',label:'الفصل الدراسي',type:'select',opts:TERMS},
   {id:'grade',label:'الصف',ph:'الثاني المتوسط'},
   {id:'teacher',label:'اسم المعلم',ph:'الاسم الثلاثي'},
   {id:'principal',label:'مدير المدرسة',ph:'الاسم الثلاثي'}
 ];
 
 var TABS={
-  daily:{label:'اليومي',title:'التقرير اليومي',topic:{label:'عنوان الدرس',ph:'الكسور العشرية'},
+  daily:{group:'main',label:'اليومي',title:'التقرير اليومي',topic:{label:'عنوان الدرس',ph:'الكسور العشرية'},
     meta:[{id:'unit',label:'الوحدة الدراسية',ph:'الوحدة الثالثة'},{id:'period',label:'الحصة',ph:'الثالثة'}],
     dateLabel:'تاريخ الحصة',
     sections:[
@@ -268,9 +479,10 @@ var TABS={
       {t:'list',id:'ints',label:'ملاحظات حول تفاعل الطلاب',n:6,ai:true,ph:['مشاركة نشطة في النقاش','حماس عند العمل الجماعي','أسئلة جيدة من الطلاب','تعاون واضح بين المجموعات','التزام بتعليمات النشاط','استجابة سريعة للتغذية الراجعة']},
       {t:'list',id:'chas',label:'التحديات الصفية',n:6,ai:true,ph:['ضيق وقت الحصة','تفاوت مستويات الطلاب','ضعف التركيز لدى بعض الطلاب','قلة الوسائل المتاحة','كثافة عدد الطلاب','غياب بعض الطلاب']}
     ]},
-  weekly:{label:'الأسبوعي',title:'التقرير الأسبوعي',topic:{label:'الأسبوع',ph:'الأسبوع الرابع'},meta:[],dateLabel:'تاريخ التقرير',
+  weekly:{group:'main',label:'الأسبوعي',title:'التقرير الأسبوعي',topic:{label:'الأسبوع',ph:'الأسبوع الرابع'},meta:[],dateLabel:'تاريخ التقرير',
     sections:[
       {t:'list',id:'lessons',label:'أهم الدروس المنفذة',n:6,ai:true,ph:['مفهوم الكسر العشري','مقارنة الكسور العشرية','ترتيب الكسور العشرية','جمع الكسور العشرية','طرح الكسور العشرية','مراجعة عامة وتقويم']},
+      {t:'pct',id:'ach',label:'متوسط تحقق الأهداف',ai:false,note:'يُحسب من تقاريرك اليومية',ph:'90'},
       {t:'list',id:'str',label:'أبرز نقاط القوة لدى الطلاب',n:3,ai:true,ph:['إتقان المهارات الأساسية','المشاركة الصفية الفاعلة','الالتزام بإنجاز الواجبات']},
       {t:'list',id:'weak',label:'أبرز نقاط الضعف لدى الطلاب',n:3,ai:true,ph:['ضعف في حل المسائل اللفظية','أخطاء في ترتيب العمليات','تردد في المشاركة الفردية']},
       {t:'list',id:'chal',label:'أبرز التحديات التعليمية',n:3,ai:true,ph:['تفاوت مستويات الطلاب','ضيق الوقت المخصص','قلة التطبيقات العملية']},
@@ -278,71 +490,331 @@ var TABS={
       {t:'list',id:'imp',label:'أثر الإجراءات على تقدم الطلاب',n:3,ai:true,ph:['تحسن ملحوظ في التطبيق','ارتفاع نسبة المشاركة','انخفاض الأخطاء المتكررة']},
       {t:'list',id:'rec',label:'توصيات الأسبوع القادم',n:3,ai:true,ph:['تكثيف التدريب الفردي','توظيف التقنية في الشرح','متابعة الطلاب المتعثرين']}
     ]},
-  monthly:{label:'الشهري',title:'التقرير الشهري',topic:{label:'الشهر',ph:'ربيع الآخر'},meta:[],dateLabel:'تاريخ التقرير',
+  monthly:{group:'main',label:'الشهري',title:'التقرير الشهري',topic:{label:'الشهر',ph:'ربيع الآخر'},meta:[],dateLabel:'تاريخ التقرير',
     sections:[
       {t:'pct',id:'prog',label:'نسبة الإنجاز',ai:[85,100],ph:'95'},
       {t:'list',id:'imps',label:'أبرز التحسينات في أداء الطلاب',n:3,ai:true,ph:['ارتفاع مستوى التحصيل','تحسن في الانضباط الصفي','زيادة المشاركة الصفية']},
       {t:'list',id:'iss',label:'القضايا المستمرة التي تحتاج متابعة',n:3,ai:true,ph:['تأخر بعض الطلاب في الواجبات','ضعف مهارات الحساب الذهني','تكرار الغياب لدى بعض الطلاب']},
       {t:'list',id:'plans',label:'خطط المعالجة المقترحة',n:3,ai:true,ph:['برنامج تقوية أسبوعي','التواصل مع أولياء الأمور','تنويع أنشطة التعلم']},
-      {t:'list',id:'top',label:'الطلاب المتميزون',n:4,ai:false,ph:['اسم الطالب']},
+      {t:'list',id:'top',label:'الطلاب المتميزون',n:4,ai:false,names:true,note:'أسماء تكتبها بنفسك',ph:['اسم الطالب']},
       {t:'list',id:'enr',label:'الخطة الإثرائية للطلاب المتميزين',n:3,ai:true,ph:['مسائل إثرائية متقدمة','مشاريع بحثية قصيرة','قيادة مجموعات التعلم']},
-      {t:'list',id:'fail',label:'الطلاب المخفقون',n:4,ai:false,ph:['اسم الطالب']},
+      {t:'list',id:'fail',label:'الطلاب المخفقون',n:4,ai:false,names:true,note:'أسماء تكتبها بنفسك',ph:['اسم الطالب']},
       {t:'list',id:'rem',label:'خطة المعالجة للمخفقين',n:3,ai:true,ph:['حصص علاجية فردية','تبسيط المهارات خطوة بخطوة','متابعة أسبوعية مع ولي الأمر']}
+    ]},
+  remedial:{group:'more',label:'الخطة العلاجية',title:'الخطة العلاجية',topic:{label:'المهارة المستهدفة',ph:'مقارنة الكسور العشرية'},
+    meta:[{id:'dur',label:'مدة الخطة',ph:'أسبوعان'},{id:'cnt',label:'عدد الطلاب المستهدفين',ph:'8'}],dateLabel:'تاريخ بدء الخطة',
+    sections:[
+      {t:'list',id:'stu',label:'الطلاب المستهدفون',n:6,ai:false,names:true,note:'أسماء تكتبها بنفسك',ph:['اسم الطالب']},
+      {t:'list',id:'cause',label:'أسباب الضعف',n:3,ai:true,ph:['ضعف في إتقان الأساسيات','قلة التدريب المنزلي','صعوبة في فهم المفهوم']},
+      {t:'list',id:'proc',label:'الإجراءات العلاجية',n:4,ai:true,ph:['حصص علاجية قصيرة','أوراق عمل متدرجة','تعلم بالأقران','متابعة فردية أسبوعية']},
+      {t:'list',id:'tools',label:'الأنشطة والوسائل',n:3,ai:true,ph:['بطاقات تعليمية','ألعاب تعليمية','عروض تقنية مبسطة']},
+      {t:'pct',id:'gain',label:'نسبة التحسن بعد التنفيذ',ai:false,note:'تسجلها بعد انتهاء الخطة',ph:'80'}
+    ]},
+  initiative:{group:'more',label:'مبادرة',title:'تقرير مبادرة',topic:{label:'اسم المبادرة',ph:'مبادرة قارئ الرياضيات'},
+    meta:[{id:'aud',label:'الفئة المستهدفة',ph:'طلاب الصف الثاني المتوسط'},{id:'dur',label:'مدة التنفيذ',ph:'فصل دراسي'}],dateLabel:'تاريخ التقرير',
+    sections:[
+      {t:'list',id:'goals',label:'أهداف المبادرة',n:4,ai:true,ph:['رفع مستوى التحصيل','تنمية حب المادة','تعزيز التعلم الذاتي','دعم الطلاب المتعثرين']},
+      {t:'list',id:'steps',label:'مراحل التنفيذ',n:4,ai:true,ph:['التخطيط والإعداد','الإعلان للطلاب','التنفيذ الميداني','القياس والتقويم']},
+      {t:'list',id:'res',label:'الشركاء والموارد',n:3,ai:true,ph:['إدارة المدرسة','رائد النشاط','أولياء الأمور']},
+      {t:'list',id:'kpi',label:'مؤشرات النجاح',n:3,ai:true,ph:['نسبة المشاركة','ارتفاع متوسط الدرجات','رضا الطلاب']},
+      {t:'list',id:'out',label:'النتائج والأثر',n:3,ai:false,note:'تكتبها بعد التنفيذ',ph:['النتيجة الأولى','النتيجة الثانية','النتيجة الثالثة']}
+    ]},
+  visits:{group:'more',label:'زيارة صفية',title:'سجل الزيارة الصفية',topic:{label:'الدرس المزار',ph:'الكسور العشرية'},
+    meta:[{id:'vis',label:'الزائر',ph:'اسم الزائر'},{id:'role',label:'صفة الزائر',ph:'مشرف تربوي'}],dateLabel:'تاريخ الزيارة',
+    sections:[
+      {t:'list',id:'pos',label:'نقاط القوة المرصودة',n:3,ai:false,note:'من ملاحظات الزائر',ph:['تنوع أساليب الشرح','إدارة صفية جيدة','تفاعل الطلاب']},
+      {t:'list',id:'obs',label:'الملاحظات والتوصيات',n:3,ai:false,note:'من ملاحظات الزائر',ph:['زيادة التقويم التكويني','توظيف الوسائل الحديثة','ضبط زمن الحصة']},
+      {t:'list',id:'dev',label:'خطة التطوير بعد الزيارة',n:3,ai:true,ph:['حضور ورشة تدريبية','تطبيق استراتيجية جديدة','زيارة تبادلية لزميل']},
+      {t:'pct',id:'score',label:'درجة التقييم',ai:false,note:'اختيارية',ph:'90'}
+    ]},
+  weekplan:{group:'more',label:'الخطة الأسبوعية',title:'الخطة الأسبوعية',topic:{label:'الأسبوع',ph:'الأسبوع الخامس'},meta:[],dateLabel:'تاريخ بداية الأسبوع',
+    sections:[
+      {t:'list',id:'sun',label:'الأحد',hint:'الدروس والأنشطة المخططة ليوم الأحد',n:2,ai:true,ph:['الكسور العشرية','تدريبات الكتاب']},
+      {t:'list',id:'mon',label:'الاثنين',hint:'الدروس والأنشطة المخططة ليوم الاثنين',n:2,ai:true,ph:['مقارنة الكسور','نشاط جماعي']},
+      {t:'list',id:'tue',label:'الثلاثاء',hint:'الدروس والأنشطة المخططة ليوم الثلاثاء',n:2,ai:true,ph:['ترتيب الكسور','ورقة عمل']},
+      {t:'list',id:'wed',label:'الأربعاء',hint:'الدروس والأنشطة المخططة ليوم الأربعاء',n:2,ai:true,ph:['جمع الكسور','مسائل حياتية']},
+      {t:'list',id:'thu',label:'الخميس',hint:'الدروس والأنشطة المخططة ليوم الخميس',n:2,ai:true,ph:['مراجعة الأسبوع','اختبار قصير']}
     ]}
 };
+var TAB_ORDER=['daily','weekly','monthly','remedial','initiative','visits','weekplan'];
+var MAIN_TABS=TAB_ORDER.filter(function(k){return TABS[k].group==='main';});
+var MORE_TABS=TAB_ORDER.filter(function(k){return TABS[k].group==='more';});
 
-var S={p:{},t:{daily:{v:{},imgs:[]},weekly:{v:{},imgs:[]},monthly:{v:{},imgs:[]}},tab:'daily'};
-var caps={dl:null,ai:null};
-var lastFocus=null;
+function keysFor(k){
+  var T=TABS[k],a=['topic'];
+  T.meta.forEach(function(m){a.push(m.id);});
+  T.sections.forEach(function(s){if(s.t==='pct'){a.push(s.id);}else{for(var i=0;i<s.n;i++){a.push(s.id+'_'+i);}}});
+  return a;
+}
+function sectionLabel(T,id){var s=T.sections.filter(function(x){return x.id===id;})[0];return s?s.label:'';}
 
-function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function load(){
+/* ---------- storage: IndexedDB with localStorage and memory fallbacks ---------- */
+var DBNAME='teacher-reports',DBSTORE='kv',idb=null,mem={};
+function idbOpen(){
+  return new Promise(function(res){
+    try{
+      var r=indexedDB.open(DBNAME,1);
+      r.onupgradeneeded=function(){r.result.createObjectStore(DBSTORE);};
+      r.onsuccess=function(){res(r.result);};
+      r.onerror=function(){res(null);};
+      r.onblocked=function(){res(null);};
+    }catch(e){res(null);}
+  });
+}
+async function kvGet(k){
+  if(idb){
+    try{return await new Promise(function(res,rej){var q=idb.transaction(DBSTORE).objectStore(DBSTORE).get(k);q.onsuccess=function(){res(q.result);};q.onerror=function(){rej(q.error);};});}catch(e){}
+  }
+  try{var s=localStorage.getItem('tr2:'+k);if(s){return JSON.parse(s);}}catch(e2){}
+  return mem[k];
+}
+async function kvSet(k,v){
+  if(idb){
+    try{await new Promise(function(res,rej){var tx=idb.transaction(DBSTORE,'readwrite');tx.objectStore(DBSTORE).put(v,k);tx.oncomplete=function(){res();};tx.onerror=function(){rej(tx.error);};tx.onabort=function(){rej(tx.error);};});return true;}catch(e){}
+  }
+  try{localStorage.setItem('tr2:'+k,JSON.stringify(v));return true;}catch(e2){}
+  mem[k]=v;return false;
+}
+
+/* ---------- state ---------- */
+var S={profiles:[],reports:{},pid:'',tab:'daily',view:'edit'};
+var caps={dl:null,ai:null,aiImages:false};
+var A={q:'',type:'',n:30};
+var saveHooks=[];
+
+function blankProfile(name){return {id:uid(),name:name||'',p:{},students:[],logo:'',sign:'',stamp:'',cur:{},updatedAt:Date.now()};}
+function liveProfiles(){return S.profiles.filter(function(p){return !p.deleted;});}
+function prof(){
+  var l=liveProfiles();
+  for(var i=0;i<l.length;i++){if(l[i].id===S.pid){return l[i];}}
+  return l[0];
+}
+function profName(P,idx){
+  if(P.name){return P.name;}
+  var a=[P.p.spec,P.p.grade].filter(Boolean).join(' - ');
+  return a||P.p.school||('ملف '+((idx==null?liveProfiles().indexOf(P):idx)+1));
+}
+/* A report is blank when nothing was typed; values carried over automatically (r.seed) do not count. */
+function isBlank(r){
+  if(r.imgs&&r.imgs.length){return false;}
+  var seed=r.seed||{};
+  return !Object.keys(r.v||{}).some(function(k){
+    if(k==='date'){return false;}
+    var x=String(r.v[k]==null?'':r.v[k]).trim();
+    return x!==''&&x!==String(seed[k]==null?'':seed[k]).trim();
+  });
+}
+function profReports(type,P){
+  P=P||prof();
+  return Object.keys(S.reports).map(function(k){return S.reports[k];}).filter(function(r){return !r.deleted&&r.pid===P.id&&(!type||r.type===type);});
+}
+function byDateDesc(a,b){
+  var x=a.v.date||'',y=b.v.date||'';
+  if(x!==y){return x<y?1:-1;}
+  return (b.updatedAt||0)-(a.updatedAt||0);
+}
+function latest(type,exceptId){
+  return profReports(type).filter(function(r){return r.id!==exceptId&&!isBlank(r);}).sort(byDateDesc)[0]||null;
+}
+function newReport(type,from){
+  var P=prof(),r={id:uid(),type:type,pid:P.id,v:{date:today()},imgs:[],created:Date.now(),updatedAt:Date.now()};
+  if(from){
+    Object.keys(from.v).forEach(function(k){if(k!=='date'){r.v[k]=from.v[k];}});
+  }else if(type==='daily'){
+    var last=latest('daily');
+    if(last&&last.v.unit){r.v.unit=last.v.unit;r.seed={unit:last.v.unit};}
+  }
+  S.reports[r.id]=r;P.cur[type]=r.id;
+  return r;
+}
+function rep(type){
+  type=type||S.tab;
+  var P=prof(),id=P.cur[type],r=id&&S.reports[id];
+  if(!r||r.deleted||r.pid!==P.id){r=newReport(type);}
+  return r;
+}
+function touch(r){(r||rep()).updatedAt=Date.now();}
+function touchProfile(){prof().updatedAt=Date.now();}
+function removeReport(r){
+  r.deleted=true;r.v={};r.imgs=[];r.updatedAt=Date.now();
+  liveProfiles().forEach(function(P){if(P.cur[r.type]===r.id){delete P.cur[r.type];}});
+}
+function progressOf(r){
+  var ks=keysFor(r.type),v=r.v;
+  var f=ks.filter(function(x){return String(v[x]==null?'':v[x]).trim()!=='';}).length;
+  return Math.round(f/ks.length*100);
+}
+
+function fixup(){
+  S.profiles=S.profiles.filter(Boolean);
+  if(!liveProfiles().length){S.profiles.push(blankProfile());}
+  var live=liveProfiles();
+  if(!live.some(function(p){return p.id===S.pid;})){S.pid=live[0].id;}
+  live.forEach(function(p){
+    p.cur=p.cur||{};p.p=p.p||{};p.students=p.students||[];
+    if(p.p.term&&TERMS.indexOf(p.p.term)<0){p.p.term='';}
+  });
+  if(!TABS[S.tab]){S.tab='daily';}
+}
+
+function migrateV1(){
   try{
-    var r=JSON.parse(localStorage.getItem(KEY)||'null');
-    if(r){
-      S.p=r.p||{};
-      Object.keys(S.t).forEach(function(k){if(r.t&&r.t[k]){S.t[k]={v:r.t[k].v||{},imgs:r.t[k].imgs||[]};}});
-      if(TABS[r.tab]){S.tab=r.tab;}
-    }
-  }catch(e){}
-  Object.keys(S.t).forEach(function(k){if(!S.t[k].v.date){S.t[k].v.date=today();}});
+    var r=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');
+    if(!r){S.profiles=[blankProfile()];return;}
+    var P=blankProfile();P.p=r.p||{};S.profiles=[P];S.pid=P.id;
+    Object.keys(r.t||{}).forEach(function(k){
+      if(!TABS[k]){return;}
+      var o=r.t[k];if(!o){return;}
+      var rr={id:uid(),type:k,pid:P.id,v:o.v||{},imgs:o.imgs||[],created:Date.now(),updatedAt:Date.now()};
+      if(!rr.v.date){rr.v.date=today();}
+      if(!isBlank(rr)){S.reports[rr.id]=rr;P.cur[k]=rr.id;}
+    });
+    if(TABS[r.tab]){S.tab=r.tab;}
+  }catch(e){S.profiles=[blankProfile()];}
 }
+
+async function loadState(){
+  idb=await idbOpen();
+  try{if(navigator.storage&&navigator.storage.persist){navigator.storage.persist();}}catch(e){}
+  var st=await kvGet('state');
+  if(st&&st.v===2){
+    S.profiles=st.profiles||[];S.reports=st.reports||{};S.pid=st.pid||'';
+    if(TABS[st.tab]){S.tab=st.tab;}
+  }else{migrateV1();}
+  fixup();
+}
+
+/* ---------- saving ---------- */
 var saveTimer=null,warned=false;
-function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,400);}
-function save(){
-  try{localStorage.setItem(KEY,JSON.stringify({p:S.p,t:S.t,tab:S.tab}));}
-  catch(e){if(!warned){warned=true;toast('تعذر الحفظ التلقائي على هذا الجهاز، نزّل التقرير قبل إغلاق الصفحة.');}}
+function prune(){
+  var keep={};
+  liveProfiles().forEach(function(p){Object.keys(p.cur).forEach(function(t){keep[p.cur[t]]=1;});});
+  var now=Date.now();
+  Object.keys(S.reports).forEach(function(id){
+    var r=S.reports[id];
+    if(r.deleted){if(now-(r.updatedAt||0)>90*864e5){delete S.reports[id];}return;}
+    if(!keep[id]&&isBlank(r)){delete S.reports[id];}
+  });
+}
+function setSaveNote(t){var n=$('#saveNote');if(n){n.textContent=t;}}
+function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,400);}
+async function saveNow(){
+  clearTimeout(saveTimer);
+  prune();
+  var ok=await kvSet('state',{v:2,profiles:S.profiles,reports:S.reports,pid:S.pid,tab:S.tab});
+  if(!ok&&!warned){warned=true;toast('تعذر الحفظ التلقائي على هذا الجهاز، نزّل التقرير قبل إغلاق الصفحة.');}
+  setSaveNote(ok?'محفوظ تلقائيًا في الأرشيف على هذا الجهاز.':'تعذر الحفظ على هذا الجهاز، نزّل نسخة احتياطية.');
+  saveHooks.forEach(function(f){try{f();}catch(e){}});
 }
 
-function fmt(loc,o,dt){try{return new Intl.DateTimeFormat(loc,o).format(dt);}catch(e){return '';}}
-function dates(s){
-  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');if(!m){return null;}
-  var dt=new Date(+m[1],+m[2]-1,+m[3],12);
-  return {
-    w:fmt('ar-SA-u-ca-gregory',{weekday:'long'},dt),
-    h:fmt('ar-SA-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric'},dt),
-    g:fmt('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'long',year:'numeric'},dt)
-  };
+/* ---------- export, import and merge ---------- */
+function exportState(strip){
+  var st={v:2,app:'teacher-reports',exportedAt:Date.now(),profiles:[],reports:{}};
+  S.profiles.forEach(function(p){
+    var c={};Object.keys(p).forEach(function(k){if(k!=='cur'){c[k]=p[k];}});
+    if(strip){c.logo='';c.sign='';c.stamp='';}
+    st.profiles.push(c);
+  });
+  Object.keys(S.reports).forEach(function(id){
+    var r=S.reports[id],c={id:r.id,type:r.type,pid:r.pid,v:r.v,created:r.created,updatedAt:r.updatedAt,imgs:strip?[]:(r.imgs||[])};
+    if(r.deleted){c.deleted=true;}
+    st.reports[id]=c;
+  });
+  return st;
+}
+function mergeState(R,stripped){
+  var changed=0;
+  (R.profiles||[]).forEach(function(rp){
+    if(!rp||!rp.id){return;}
+    var lp=S.profiles.filter(function(x){return x.id===rp.id;})[0];
+    if(!lp){var np={};Object.keys(rp).forEach(function(k){np[k]=rp[k];});np.cur={};S.profiles.push(np);changed++;}
+    else if((rp.updatedAt||0)>(lp.updatedAt||0)){
+      var keep={cur:lp.cur,logo:lp.logo,sign:lp.sign,stamp:lp.stamp};
+      Object.keys(rp).forEach(function(k){lp[k]=rp[k];});
+      lp.cur=keep.cur;
+      if(stripped){['logo','sign','stamp'].forEach(function(k){if(!rp[k]){lp[k]=keep[k];}});}
+      changed++;
+    }
+  });
+  Object.keys(R.reports||{}).forEach(function(id){
+    var rr=R.reports[id],lr=S.reports[id];
+    if(!rr||!rr.v&&!rr.deleted){return;}
+    rr.v=rr.v||{};rr.imgs=rr.imgs||[];
+    if(!lr){S.reports[id]=rr;changed++;}
+    else if((rr.updatedAt||0)>(lr.updatedAt||0)){
+      if(!rr.imgs.length&&!rr.deleted){rr.imgs=lr.imgs||[];}
+      S.reports[id]=rr;changed++;
+    }
+  });
+  fixup();
+  return changed;
 }
 
-var timer=null;
-function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(timer);timer=setTimeout(function(){t.classList.remove('on');},3200);}
+/* ---------- shell: profile switcher, view nav, type tabs ---------- */
+var lastFocus=null;
+function renderChrome(){
+  var live=liveProfiles(),sel=$('#profSel');
+  sel.innerHTML=live.map(function(p,i){return '<option value="'+esc(p.id)+'"'+(p.id===S.pid?' selected':'')+'>'+esc(profName(p,i))+'</option>';}).join('');
+  sel.parentNode.hidden=live.length<2;
+  $$('.vbtn').forEach(function(b){
+    var on=b.dataset.view===S.view;
+    if(on){b.setAttribute('aria-current','page');}else{b.removeAttribute('aria-current');}
+  });
+  document.body.dataset.view=S.view;
+  renderTabs();
+}
+function renderTabs(){
+  var h=MAIN_TABS.map(function(k){
+    return '<button class="tab" role="tab" data-tab="'+k+'" aria-selected="'+(S.tab===k)+'">'+TABS[k].label+'</button>';
+  }).join('');
+  var inMore=TABS[S.tab].group==='more';
+  h+='<button class="tab more" role="tab" data-act="moretypes" aria-selected="'+inMore+'" aria-haspopup="dialog">'+esc(inMore?TABS[S.tab].label:'أخرى')+icon('chev')+'</button>';
+  $('#tabs').innerHTML=h;
+}
+function renderView(){
+  var f=$('#form');
+  f.removeAttribute('aria-labelledby');
+  if(S.view==='edit'){f.innerHTML=editHTML();updateMeta();}
+  else if(S.view==='archive'){f.innerHTML=archiveHTML();}
+  else if(S.view==='dash'){f.innerHTML=dashHTML();}
+  else{f.innerHTML=settingsHTML();}
+}
+function renderAll(keepOpen){
+  var open=keepOpen&&$('#prof')&&$('#prof').open;
+  renderChrome();renderView();
+  if(open&&$('#prof')){$('#prof').open=true;}
+}
+function goView(v){
+  S.view=v;renderAll();window.scrollTo({top:0});
+}
+function setTab(k){
+  S.tab=k;S.view='edit';renderAll();queueSave();
+  window.scrollTo({top:0});
+}
 
-function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>';}
+/* ---------- edit view ---------- */
 function inputHTML(scope,id,val,ph,extra){
   return '<input type="text" id="'+scope+'-'+id+'" data-s="'+scope+'" data-k="'+id+'" value="'+esc(val)+'" placeholder="'+esc(ph?'مثال: '+ph:'')+'" autocomplete="off" '+(extra||'')+'>';
 }
-
-function renderForm(){
-  var k=S.tab,T=TABS[k],v=S.t[k].v,imgs=S.t[k].imgs,h='';
-  var prof=PROFILE.map(function(f){
+function toolsHTML(k){
+  var b='<button type="button" class="btn" data-act="newrep">'+icon('plus')+'تقرير جديد</button>'+
+    '<button type="button" class="btn" data-act="copyprev">'+icon('copy')+'نسخ من تقرير سابق</button>';
+  if(k==='daily'){b+='<button type="button" class="btn" data-act="book">'+icon('cam')+'قراءة صفحة الكتاب بالتصوير</button>';}
+  if(k==='weekly'){b+='<button type="button" class="btn accent" data-act="aggregate">'+icon('wand')+'تعبئة من تقاريري اليومية</button>';}
+  if(k==='monthly'){b+='<button type="button" class="btn accent" data-act="aggregate">'+icon('wand')+'تعبئة من تقارير الشهر</button>';}
+  return '<section class="card tools"><div class="btnrow">'+b+'</div></section>';
+}
+function editHTML(){
+  var k=S.tab,T=TABS[k],r=rep(k),v=r.v,imgs=r.imgs,P=prof(),h='';
+  var prof_=PROFILE.map(function(f){
     if(f.type==='select'){
-      var o='<option value="">اختر الفصل</option>'+f.opts.map(function(x){return '<option'+(S.p[f.id]===x?' selected':'')+'>'+x+'</option>';}).join('');
+      var o='<option value="">اختر الفصل</option>'+f.opts.map(function(x){return '<option'+(P.p[f.id]===x?' selected':'')+'>'+x+'</option>';}).join('');
       return '<div class="field"><label class="l" for="p-'+f.id+'">'+f.label+'</label><select id="p-'+f.id+'" data-s="p" data-k="'+f.id+'">'+o+'</select></div>';
     }
-    return '<div class="field"><label class="l" for="p-'+f.id+'">'+f.label+'</label>'+inputHTML('p',f.id,S.p[f.id],f.ph)+'</div>';
+    return '<div class="field"><label class="l" for="p-'+f.id+'">'+f.label+'</label>'+inputHTML('p',f.id,P.p[f.id],f.ph)+'</div>';
   }).join('');
-  h+='<details class="card" id="prof"'+(S.p.school?'':' open')+'><summary><span>بيانات المدرسة والمعلم</span><small>تُدخل مرة واحدة وتظهر في كل التقارير</small></summary><div class="grid prof-grid">'+prof+'</div></details>';
+  h+='<details class="card" id="prof"'+(P.p.school?'':' open')+'><summary><span>بيانات المدرسة والمعلم</span><small>تُدخل مرة واحدة وتظهر في كل التقارير</small></summary><div class="grid prof-grid">'+prof_+'</div></details>';
+  h+=toolsHTML(k);
 
   var meta=T.meta.map(function(m){return '<div class="field"><label class="l" for="t-'+m.id+'">'+m.label+'</label>'+inputHTML('t',m.id,v[m.id],m.ph)+'</div>';}).join('');
   h+='<section class="card"><h2>'+T.title+'</h2><div class="grid">'+
@@ -353,85 +825,250 @@ function renderForm(){
 
   T.sections.forEach(function(s){
     if(s.t==='pct'){
-      h+='<section class="card"><h2>'+s.label+'</h2><div class="pct"><input type="number" id="t-'+s.id+'" data-s="t" data-k="'+s.id+'" min="0" max="100" inputmode="numeric" value="'+esc(v[s.id])+'" placeholder="مثال: '+s.ph+'" aria-label="'+s.label+'"><span aria-hidden="true">%</span></div></section>';
+      h+='<section class="card"><h2>'+s.label+(s.ai===false&&s.note?' <small>'+esc(s.note)+'</small>':'')+'</h2><div class="pct"><input type="number" id="t-'+s.id+'" data-s="t" data-k="'+s.id+'" min="0" max="100" inputmode="numeric" value="'+esc(v[s.id])+'" placeholder="مثال: '+s.ph+'" aria-label="'+s.label+'"><span aria-hidden="true">%</span></div></section>';
       return;
     }
-    var rows='';
+    var rows='',withAI=s.ai!==false;
     for(var i=0;i<s.n;i++){
-      var key=s.id+'_'+i;
-      var ph=s.ph[i]||s.ph[0];
-      rows+='<div class="row"><span class="num" aria-hidden="true">'+(i+1)+'</span><input type="text" id="t-'+key+'" data-s="t" data-k="'+key+'" maxlength="90" value="'+esc(v[key])+'" placeholder="'+esc('مثال: '+ph)+'" aria-label="'+esc(s.label+' '+(i+1))+'" autocomplete="off"></div>';
+      var key=s.id+'_'+i,ph=s.ph[i]||s.ph[0];
+      rows+='<div class="row"><span class="num" aria-hidden="true">'+(i+1)+'</span><input type="text" id="t-'+key+'" data-s="t" data-k="'+key+'" maxlength="90" value="'+esc(v[key])+'" placeholder="'+esc('مثال: '+ph)+'" aria-label="'+esc(s.label+' '+(i+1))+'" autocomplete="off">'+
+        (withAI?'<button type="button" class="cellai" data-cellai="'+key+'" aria-label="اقتراحات بالذكاء الاصطناعي للخانة '+(i+1)+'">'+icon('ai')+'</button>':'')+'</div>';
     }
-    h+='<section class="card"><h2>'+s.label+(s.ai===false?' <small>أسماء تكتبها بنفسك</small>':'')+'</h2><div class="rows'+(s.n>3?' two':'')+'">'+rows+'</div></section>';
+    var tools=(s.names&&P.students.length)?'<button type="button" class="btn mini" data-students="'+s.id+'">'+icon('users')+'من قائمة الطلاب</button>':'';
+    h+='<section class="card"><div class="sec-head"><h2>'+s.label+(s.ai===false?' <small>'+esc(s.note||'تكتبها بنفسك')+'</small>':'')+'</h2>'+tools+'</div><div class="rows'+(s.n>=4?' two':'')+'">'+rows+'</div></section>';
   });
 
   var th=imgs.map(function(src,i){return '<figure><img src="'+src+'" alt="شاهد '+(i+1)+'"><button type="button" class="x" data-del="'+i+'" aria-label="حذف الصورة '+(i+1)+'">'+icon('x')+'</button></figure>';}).join('');
-  if(imgs.length<MAXIMG){th+='<label class="add" for="file">'+icon('img')+'<span>إضافة صورة</span></label>';}
-  h+='<section class="card"><h2>الشواهد المصورة <small>حتى '+MAXIMG+' صور</small></h2><div class="thumbs">'+th+'</div><input class="sr" type="file" id="file" accept="image/*" multiple></section>';
+  if(imgs.length<MAXIMG){th+='<label class="add" for="imgFile">'+icon('img')+'<span>إضافة صورة</span></label>';}
+  h+='<section class="card"><h2>الشواهد المصورة <small>حتى '+MAXIMG+' صور</small></h2><div class="thumbs">'+th+'</div></section>';
 
   h+='<section class="card"><h2>خيارات أخرى</h2><div class="btnrow">'+
     '<button type="button" class="btn" data-act="copy">'+icon('copy')+'نسخ التقرير كنص</button>'+
+    '<button type="button" class="btn desk-hide" data-act="docx">'+icon('doc')+'ملف وورد</button>'+
     '<button type="button" class="btn" data-act="demo">'+icon('flask')+'ملء بيانات تجريبية</button>'+
-    '<button type="button" class="btn danger" data-act="clear">'+icon('trash')+'حذف بيانات التقرير</button>'+
+    '<button type="button" class="btn danger" data-act="clear">'+icon('trash')+'حذف هذا التقرير</button>'+
     '</div></section>';
-
-  $('#form').innerHTML=h;
-  updateMeta();
+  return h;
 }
 
-function keysFor(k){
-  var T=TABS[k],a=['topic'];
-  T.meta.forEach(function(m){a.push(m.id);});
-  T.sections.forEach(function(s){if(s.t==='pct'){a.push(s.id);}else{for(var i=0;i<s.n;i++){a.push(s.id+'_'+i);}}});
-  return a;
-}
-function progress(){
-  var v=S.t[S.tab].v,ks=keysFor(S.tab);
-  var f=ks.filter(function(x){return String(v[x]==null?'':v[x]).trim()!=='';}).length;
-  return Math.round(f/ks.length*100);
-}
+function progress(){return progressOf(rep());}
 function updateMeta(){
-  var p=progress();
+  var p=progress(),r=rep();
   $('#bar').style.width=p+'%';
   $('.progress').setAttribute('aria-valuenow',p);
   $('#pctTxt').textContent=p+'%';
-  var d=dates(S.t[S.tab].v.date),hj=$('#hj');
+  var d=dates(r.v.date),hj=$('#hj');
   if(hj){hj.textContent=d?(d.w+' · '+d.h):'';}
   var kf=$('#keyField');
-  if(kf){kf.classList.toggle('empty',!String(S.t[S.tab].v.topic||'').trim());}
-}
-function setTab(k){
-  S.tab=k;
-  ['daily','weekly','monthly'].forEach(function(x){$('#tab-'+x).setAttribute('aria-selected',x===k?'true':'false');});
-  $('#form').setAttribute('aria-labelledby','tab-'+k);
-  renderForm();queueSave();
-  window.scrollTo({top:0});
+  if(kf){kf.classList.toggle('empty',!String(r.v.topic||'').trim());}
 }
 
+/* ---------- archive view ---------- */
+function reportTitle(r){return String(r.v.topic||'').trim()||'بدون عنوان';}
+function reportSub(r){
+  var d=dates(r.v.date),a=[];
+  if(d){a.push(d.w+' '+d.h);}
+  var T=TABS[r.type];
+  if(r.type==='daily'&&r.v.period){a.push('الحصة '+r.v.period);}
+  a.push('اكتمال '+progressOf(r)+'%');
+  return a.join(' · ');
+}
+function archiveHTML(){
+  var all=profReports().filter(function(r){return !isBlank(r);});
+  var q=A.q.trim().toLowerCase();
+  var list=all.filter(function(r){
+    if(A.type&&r.type!==A.type){return false;}
+    if(!q){return true;}
+    return Object.keys(r.v).some(function(k){return String(r.v[k]).toLowerCase().indexOf(q)>-1;});
+  }).sort(byDateDesc);
+  var opts='<option value="">كل الأنواع</option>'+TAB_ORDER.map(function(k){return '<option value="'+k+'"'+(A.type===k?' selected':'')+'>'+TABS[k].label+'</option>';}).join('');
+  var h='<section class="card"><h2>الأرشيف <small>'+all.length+' تقرير في هذا الملف</small></h2><div class="grid">'+
+    '<div class="field"><label class="l" for="aq">بحث في التقارير</label><input type="text" id="aq" value="'+esc(A.q)+'" placeholder="عنوان درس أو كلمة" autocomplete="off"></div>'+
+    '<div class="field"><label class="l" for="at">النوع</label><select id="at">'+opts+'</select></div></div></section>';
+  if(!list.length){
+    h+='<section class="card empty-state"><p>'+(all.length?'لا توجد تقارير مطابقة للبحث.':'لا توجد تقارير محفوظة بعد. ابدأ بتقرير جديد وسيظهر هنا تلقائيًا.')+'</p></section>';
+    return h;
+  }
+  var cur=prof().cur;
+  h+='<section class="card list">'+list.slice(0,A.n).map(function(r){
+    var isCur=cur[r.type]===r.id;
+    return '<article class="item"><div class="it-main"><div class="it-top"><span class="chip">'+esc(TABS[r.type].label)+'</span>'+(isCur?'<span class="chip on">المفتوح الآن</span>':'')+'<b>'+esc(reportTitle(r))+'</b></div><div class="it-meta">'+esc(reportSub(r))+'</div></div>'+
+      '<div class="it-act"><button type="button" class="btn mini primary" data-open="'+r.id+'">فتح</button><button type="button" class="btn mini" data-dup="'+r.id+'">نسخ كجديد</button><button type="button" class="btn mini danger" data-delrep="'+r.id+'" aria-label="حذف التقرير">'+icon('trash')+'</button></div></article>';
+  }).join('')+'</section>';
+  if(list.length>A.n){h+='<div class="btnrow center"><button type="button" class="btn" data-act="more">عرض المزيد ('+(list.length-A.n)+')</button></div>';}
+  return h;
+}
+
+/* ---------- dashboard ---------- */
+function barChart(items,opts){
+  /* items: [{label,value}], newest first; drawn right to left because the page is RTL */
+  var W=340,H=170,padB=34,padT=18,padL=28,padR=10,n=items.length,gap=8;
+  var bw=Math.max(10,(W-padL-padR-gap*(n-1))/n),max=100,svg='';
+  svg+='<line x1="'+padL+'" x2="'+(W-padR)+'" y1="'+(H-padB)+'" y2="'+(H-padB)+'" class="ax"/>';
+  [50,100].forEach(function(g){var y=padT+(H-padB-padT)*(1-g/max);svg+='<line x1="'+padL+'" x2="'+(W-padR)+'" y1="'+y+'" y2="'+y+'" class="gl"/><text x="'+(padL-5)+'" y="'+(y+4)+'" text-anchor="end" class="tx">'+g+'</text>';});
+  items.forEach(function(it,i){
+    var x=W-padR-bw-i*(bw+gap);
+    if(it.value==null){svg+='<rect x="'+x+'" y="'+(H-padB-3)+'" width="'+bw+'" height="3" class="bar0"/>';}
+    else{
+      var h=(H-padB-padT)*it.value/max,y=H-padB-h;
+      svg+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+h+'" rx="3" class="bar"/><text x="'+(x+bw/2)+'" y="'+(y-4)+'" text-anchor="middle" class="tv">'+it.value+'</text>';
+    }
+    svg+='<text x="'+(x+bw/2)+'" y="'+(H-padB+14)+'" text-anchor="middle" class="tx">'+esc(it.label)+'</text>';
+  });
+  return '<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img" aria-label="'+esc(opts.aria)+'">'+svg+'</svg>';
+}
+function dashHTML(){
+  var all=profReports().filter(function(r){return !isBlank(r);});
+  var daily=all.filter(function(r){return r.type==='daily';});
+  var hk=hijriKey(today());
+  var inMonth=all.filter(function(r){return hijriKey(r.v.date)===hk;}).length;
+  var achAll=avgOf(daily.map(function(r){return numOf(r.v.ach);}).filter(function(x){return x!=null;}));
+  var start=weekRange(today())[0],items=[];
+  for(var i=9;i>=0;i--){
+    var ws=addDays(start,-7*i),we=addDays(ws,6);
+    var vals=daily.filter(function(r){return r.v.date>=ws&&r.v.date<=we;}).map(function(r){return numOf(r.v.ach);}).filter(function(x){return x!=null;});
+    var d=parseISO(ws);
+    items.push({label:d.getDate()+'/'+(d.getMonth()+1),value:avgOf(vals)});
+  }
+  items.reverse();
+  var hasData=items.some(function(x){return x.value!=null;});
+  var byType=TAB_ORDER.map(function(k){return {k:k,n:all.filter(function(r){return r.type===k;}).length};}).filter(function(x){return x.n;});
+  var chal=freqList(daily,'chas').slice(0,5),ints=freqList(daily,'ints').slice(0,5);
+  function list(a,empty){return a.length?'<ol class="rank">'+a.map(function(x){return '<li><span>'+esc(x.text)+'</span><b>'+x.n+'</b></li>';}).join('')+'</ol>':'<p class="muted">'+empty+'</p>';}
+  var h='<section class="card"><h2>نظرة عامة</h2><div class="stats">'+
+    '<div class="stat"><b>'+all.length+'</b><span>تقرير محفوظ</span></div>'+
+    '<div class="stat"><b>'+inMonth+'</b><span>تقرير هذا الشهر الهجري</span></div>'+
+    '<div class="stat"><b>'+(achAll==null?'—':achAll+'%')+'</b><span>متوسط تحقق الأهداف</span></div>'+
+    '<div class="stat"><b>'+daily.length+'</b><span>تقرير يومي</span></div></div></section>';
+  h+='<section class="card"><h2>تحقق الأهداف أسبوعيًا <small>آخر عشرة أسابيع، بحسب تقاريرك اليومية</small></h2>'+
+    (hasData?barChart(items,{aria:'متوسط تحقق الأهداف لكل أسبوع'}):'<p class="muted">يظهر الرسم عندما تسجّل نسبة تحقق الأهداف في تقاريرك اليومية.</p>')+'</section>';
+  h+='<section class="card"><h2>التحديات الأكثر تكرارًا</h2>'+list(chal,'لا توجد بيانات كافية بعد.')+'</section>';
+  h+='<section class="card"><h2>أبرز ملاحظات التفاعل</h2>'+list(ints,'لا توجد بيانات كافية بعد.')+'</section>';
+  if(byType.length){h+='<section class="card"><h2>التقارير حسب النوع</h2><div class="chips">'+byType.map(function(x){return '<span class="chip big">'+esc(TABS[x.k].label)+' <b>'+x.n+'</b></span>';}).join('')+'</div></section>';}
+  return h;
+}
+
+/* ---------- settings view ---------- */
+function identRow(kind,label,hint){
+  var P=prof(),src=P[kind];
+  return '<div class="ident"><div class="ident-prev">'+(src?'<img src="'+src+'" alt="'+esc(label)+'">':'<span>'+icon('img')+'</span>')+'</div>'+
+    '<div class="ident-info"><b>'+label+'</b><small>'+hint+'</small><div class="btnrow">'+
+    '<label class="btn mini" for="id-'+kind+'">'+(src?'تغيير':'رفع صورة')+'</label>'+(src?'<button type="button" class="btn mini danger" data-identdel="'+kind+'">إزالة</button>':'')+'</div>'+
+    '<input class="sr" type="file" id="id-'+kind+'" data-ident="'+kind+'" accept="image/*"></div></div>';
+}
+function settingsHTML(){
+  var P=prof(),live=liveProfiles(),h='';
+  h+='<section class="card"><h2>الملف الحالي <small>لكل مادة أو صف أو مدرسة ملف مستقل</small></h2>'+
+    '<div class="grid"><div class="field wide"><label class="l" for="pname">اسم الملف</label><input type="text" id="pname" value="'+esc(P.name)+'" placeholder="'+esc(profName(P))+'" autocomplete="off"><small>يظهر في القائمة العلوية. اتركه فارغًا ليُبنى من التخصص والصف.</small></div></div>'+
+    '<div class="btnrow"><button type="button" class="btn" data-act="newprof">'+icon('plus')+'ملف جديد</button>'+
+    '<button type="button" class="btn danger" data-act="delprof"'+(live.length<2?' disabled':'')+'>'+icon('trash')+'حذف هذا الملف</button></div></section>';
+  h+='<section class="card"><h2>قائمة الطلاب <small>تُستخدم لاختيار الأسماء في التقارير</small></h2>'+
+    '<div class="field"><label class="l" for="stuList">اسم كل طالب في سطر</label><textarea id="stuList" rows="6" placeholder="أحمد محمد&#10;خالد علي">'+esc(P.students.join('\n'))+'</textarea><small id="stuCount">'+P.students.length+' طالب</small></div></section>';
+  h+='<section class="card"><h2>الهوية على الورقة <small>تظهر في أعلى التقرير وعند التوقيع</small></h2><div class="idents">'+
+    identRow('logo','شعار المدرسة','يظهر بجانب اسم المدرسة')+
+    identRow('sign','توقيع المعلم','يفضّل صورة على خلفية بيضاء')+
+    identRow('stamp','ختم أو توقيع المدير','يظهر عند خانة المدير')+'</div></section>';
+  h+='<section class="card"><h2>نسخة احتياطية <small>تحمي بياناتك عند تغيير الجهاز أو مسح المتصفح</small></h2>'+
+    '<p class="muted">يحتفظ المتصفح ببياناتك على هذا الجهاز فقط. نزّل نسخة من وقت لآخر، أو فعّل المزامنة بين أجهزتك.</p>'+
+    '<div class="btnrow"><button type="button" class="btn" data-act="backup">'+icon('down')+'تنزيل نسخة احتياطية</button>'+
+    '<label class="btn" for="restoreFile">'+icon('up')+'استيراد نسخة</label></div></section>';
+  h+=syncCardHTML();
+  h+='<section class="card"><h2>تثبيت على الجوال</h2><p class="muted" id="installNote">'+installNote()+'</p>'+
+    '<div class="btnrow"><button type="button" class="btn" data-act="install" id="installBtn"'+(deferredInstall?'':' hidden')+'>'+icon('phone')+'تثبيت التطبيق</button></div></section>';
+  return h;
+}
+function installNote(){
+  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches){return 'التطبيق مثبّت على هذا الجهاز.';}
+  if(deferredInstall){return 'ثبّت الصفحة لتفتحها كتطبيق من الشاشة الرئيسية، وتعمل حتى دون إنترنت.';}
+  if(ios){return 'في آيفون: افتح الصفحة في سفاري، اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية». التثبيت يحميها أيضًا من حذف المتصفح لبياناتها.';}
+  return 'في كروم: افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».';
+}
+
+/* ---------- modal helpers ---------- */
+var dlgAction=null;
+function openDlg(o){
+  lastFocus=document.activeElement;dlgAction=o.onOk;
+  $('#dlgT').textContent=o.title;$('#dlgP').textContent=o.text;$('#dlgOk').textContent=o.ok||'حذف';
+  $('#dlg').hidden=false;$('#dlgOk').focus();
+}
+function closeDlg(){$('#dlg').hidden=true;dlgAction=null;if(lastFocus&&lastFocus.focus){lastFocus.focus();}}
+
+var pickAction=null;
+function openPicker(o){
+  lastFocus=document.activeElement;
+  $('#pickT').textContent=o.title;
+  var body='',foot=$('#pickFoot');
+  if(!o.items.length){body='<p class="muted pad">'+esc(o.empty||'لا توجد عناصر.')+'</p>';}
+  else if(o.multi){
+    body=o.items.map(function(it){return '<label class="pitem"><input type="checkbox" value="'+esc(it.id)+'"><span><b>'+esc(it.label)+'</b>'+(it.sub?'<small>'+esc(it.sub)+'</small>':'')+'</span></label>';}).join('');
+  }else{
+    body=o.items.map(function(it){return '<button type="button" class="pitem" data-pick="'+esc(it.id)+'"><span><b>'+esc(it.label)+'</b>'+(it.sub?'<small>'+esc(it.sub)+'</small>':'')+'</span></button>';}).join('');
+  }
+  $('#pickBody').innerHTML=body;
+  foot.hidden=!(o.multi&&o.items.length);
+  if(o.okLabel){$('#pickOk').textContent=o.okLabel;}
+  pickAction=o.onPick;
+  $('#pick').hidden=false;
+  var f=$('#pickBody button,#pickBody input');if(f){f.focus();}else{$('#pick [data-pickclose]').focus();}
+}
+function closePicker(){$('#pick').hidden=true;pickAction=null;if(lastFocus&&lastFocus.focus){lastFocus.focus();}}
+
+/* ---------- preview ---------- */
+function layoutPreview(){
+  var body=$('#pvBody'),wrap=$('#pvWrap'),sheet=wrap.firstElementChild;
+  if(!sheet){return;}
+  var w=Math.min(794,body.clientWidth-28);if(w<200){w=200;}
+  var s=w/794;
+  sheet.style.transform='scale('+s+')';
+  wrap.style.width=w+'px';
+  wrap.style.height=Math.ceil(sheet.offsetHeight*s)+'px';
+}
+function openPreview(){
+  lastFocus=document.activeElement;
+  $('#pvWrap').innerHTML=sheetHTML(rep());
+  $('#pv').hidden=false;
+  layoutPreview();
+  $('#pvClose').focus();
+}
+function closePreview(){$('#pv').hidden=true;$('#pvWrap').innerHTML='';if(lastFocus&&lastFocus.focus){lastFocus.focus();}}
+
 /* ---------- printed sheet ---------- */
-function sheetHTML(k){
-  var T=TABS[k],v=S.t[k].v,p=S.p,dt=dates(v.date),imgs=S.t[k].imgs;
-  function cell(l,val,cls){return '<div class="sh-c '+(cls||'')+'"><b>'+l+'</b><span>'+esc(val||'')+'</span></div>';}
-  var info=cell('التخصص',p.spec)+cell('الفصل الدراسي',p.term)+cell('الصف',p.grade);
+function gridClass(n){return (n===4||n===2)?'c2':'c3';}
+function sheetCells(r){
+  var T=TABS[r.type],v=r.v,p=prof().p,dt=dates(v.date);
   var dtxt=dt?(dt.w+' '+dt.h+' الموافق '+dt.g):'';
-  if(k==='daily'){info+=cell('الوحدة الدراسية',v.unit)+cell(T.topic.label,v.topic)+cell('الحصة',v.period)+cell(T.dateLabel,dtxt,'w3');}
-  else{info+=cell(T.topic.label,v.topic)+cell(T.dateLabel,dtxt,'w2');}
+  var info=[['التخصص',p.spec],['الفصل الدراسي',p.term],['الصف',p.grade]];
+  if(r.type==='daily'){
+    info.push(['الوحدة الدراسية',v.unit],[T.topic.label,v.topic],['الحصة',v.period],[T.dateLabel,dtxt,'w3']);
+  }else{
+    var items=[[T.topic.label,v.topic]].concat(T.meta.map(function(m){return [m.label,v[m.id]];}));
+    if(items.length===1){info.push(items[0],[T.dateLabel,dtxt,'w2']);}
+    else{info=info.concat(items);info.push([T.dateLabel,dtxt,'w3']);}
+  }
+  return info;
+}
+function sheetHTML(r){
+  var T=TABS[r.type],v=r.v,P=prof(),p=P.p,imgs=r.imgs||[];
+  function cell(c){return '<div class="sh-c '+(c[2]||'')+'"><b>'+esc(c[0])+'</b><span>'+esc(c[1]||'')+'</span></div>';}
+  var info=sheetCells(r).map(cell).join('');
   var secs=T.sections.map(function(s){
-    if(s.t==='pct'){var x=v[s.id];return '<div class="sh-sec"><div class="sh-h">'+s.label+'</div><div class="sh-pct">'+(x!==''&&x!=null?esc(x)+'%':'&nbsp;')+'</div></div>';}
+    if(s.t==='pct'){var x=v[s.id];return '<div class="sh-sec"><div class="sh-h">'+esc(s.label)+'</div><div class="sh-pct">'+(x!==''&&x!=null?esc(x)+'%':'&nbsp;')+'</div></div>';}
     var cells='';
     for(var i=0;i<s.n;i++){cells+='<div class="sh-cell"><span class="sh-n">'+(i+1)+'</span><span>'+esc(v[s.id+'_'+i]||'')+'</span></div>';}
-    return '<div class="sh-sec"><div class="sh-h">'+s.label+'</div><div class="sh-cells '+(s.n===4?'c2':'c3')+'">'+cells+'</div></div>';
+    return '<div class="sh-sec"><div class="sh-h">'+esc(s.label)+'</div><div class="sh-cells '+gridClass(s.n)+'">'+cells+'</div></div>';
   }).join('');
   var im=imgs.length?'<div class="sh-sec"><div class="sh-h">الشواهد المصورة</div><div class="sh-imgs">'+imgs.map(function(s){return '<img src="'+s+'" alt="">';}).join('')+'</div></div>':'';
+  var brand='<div class="sh-brand"><div class="sh-org"><b>'+esc(p.school||'')+'</b>'+esc(p.eduDept||'')+'</div>'+(P.logo?'<img class="sh-logo" src="'+P.logo+'" alt="">':'')+'</div>';
   return '<div class="sheet">'+
-    '<div class="sh-head"><div><div class="sh-title">'+T.title+'</div><div class="sh-sub">'+esc(p.teacher?('المعلم: '+p.teacher):'')+'</div></div>'+
-    '<div class="sh-org"><b>'+esc(p.school||'')+'</b>'+esc(p.eduDept||'')+'</div></div>'+
+    '<div class="sh-head"><div><div class="sh-title">'+esc(T.title)+'</div><div class="sh-sub">'+esc(p.teacher?('المعلم: '+p.teacher):'')+'</div></div>'+brand+'</div>'+
     '<div class="sh-info">'+info+'</div>'+secs+im+
-    '<div class="sh-sign"><div><b>المعلم</b> '+esc(p.teacher||'')+'<br><b>التوقيع</b></div><div><b>مدير المدرسة</b> '+esc(p.principal||'')+'<br><b>التوقيع</b></div></div>'+
+    '<div class="sh-sign"><div><b>المعلم</b> '+esc(p.teacher||'')+'<br><b>التوقيع</b> '+(P.sign?'<img class="sh-sig" src="'+P.sign+'" alt="">':'')+'</div>'+
+    '<div><b>مدير المدرسة</b> '+esc(p.principal||'')+'<br><b>التوقيع والختم</b> '+(P.stamp?'<img class="sh-sig sh-stamp" src="'+P.stamp+'" alt="">':'')+'</div></div>'+
   '</div>';
 }
-function reportText(k){
-  var T=TABS[k],v=S.t[k].v,p=S.p,dt=dates(v.date),L=[];
+function reportText(r){
+  var T=TABS[r.type],v=r.v,p=prof().p,dt=dates(v.date),L=[];
   L.push(T.title);
   if(p.school){L.push(p.school+(p.eduDept?' - '+p.eduDept:''));}
   var meta=[];
@@ -451,41 +1088,294 @@ function reportText(k){
   });
   return L.join('\n');
 }
+/* ASCII names: some browsers drop the whole name when it holds Arabic letters */
+function fileBase(r){return 'report-'+r.type+'-'+(r.v.date||today());}
 
-/* ---------- actions ---------- */
-function busy(btns,on,txt){
-  btns.forEach(function(b){b.disabled=on;});
+/* ---------- Word (.docx) built by hand so Arabic stays right to left ---------- */
+function xesc(s){return String(s==null?'':s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function wRun(text,o){
+  o=o||{};var sz=o.sz||24;
+  return '<w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>'+(o.b?'<w:b/><w:bCs/>':'')+(o.color?'<w:color w:val="'+o.color+'"/>':'')+'<w:sz w:val="'+sz+'"/><w:szCs w:val="'+sz+'"/><w:rtl/></w:rPr><w:t xml:space="preserve">'+xesc(text)+'</w:t></w:r>';
 }
-async function exportPdf(){
-  if(!window.html2pdf){toast('تعذر تحميل أداة إنشاء الملف، تحقق من الاتصال ثم أعد المحاولة.');return;}
-  var btns=Array.prototype.slice.call(document.querySelectorAll('[data-act="pdf"]'));
-  busy(btns,true);toast('جارٍ تجهيز الملف...');
+function wPara(runs,o){
+  o=o||{};
+  var pad=o.fill?'<w:pBdr><w:top w:val="single" w:sz="4" w:space="2" w:color="'+o.fill+'"/><w:left w:val="single" w:sz="4" w:space="6" w:color="'+o.fill+'"/><w:bottom w:val="single" w:sz="4" w:space="2" w:color="'+o.fill+'"/><w:right w:val="single" w:sz="4" w:space="6" w:color="'+o.fill+'"/></w:pBdr>':'';
+  return '<w:p><w:pPr>'+(o.keep?'<w:keepNext/>':'')+pad+(o.fill?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.fill+'"/>':'')+'<w:bidi/><w:spacing w:before="'+(o.before||0)+'" w:after="'+(o.after==null?60:o.after)+'"/>'+(o.center?'<w:jc w:val="center"/>':'')+'</w:pPr>'+(runs||'')+'</w:p>';
+}
+var DOCX_W=10306;
+function wCell(w,inner,o){
+  o=o||{};
+  return '<w:tc><w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'+(o.span?'<w:gridSpan w:val="'+o.span+'"/>':'')+(o.noBorder?'<w:tcBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/></w:tcBorders>':'')+(o.fill?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.fill+'"/>':'')+'</w:tcPr>'+(inner||wPara(''))+'</w:tc>';
+}
+function wTable(cols,rows,o){
+  o=o||{};var bd=o.noBorder?'':'<w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/><w:left w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/><w:right w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD3DC"/></w:tblBorders>';
+  return '<w:tbl><w:tblPr><w:bidiVisual/><w:tblW w:w="'+DOCX_W+'" w:type="dxa"/>'+bd+'<w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="40" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="40" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>'+cols.map(function(c){return '<w:gridCol w:w="'+c+'"/>';}).join('')+'</w:tblGrid>'+
+    rows.map(function(r){return '<w:tr><w:trPr><w:cantSplit/></w:trPr>'+r+'</w:tr>';}).join('')+'</w:tbl>'+wPara('',{after:0});
+}
+function dataUrlBytes(u){
+  var m=/^data:image\/(png|jpeg|jpg);base64,(.*)$/.exec(u||'');if(!m){return null;}
+  var bin=atob(m[2]),a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++){a[i]=bin.charCodeAt(i);}
+  return {ext:m[1]==='png'?'png':'jpeg',bytes:a};
+}
+function imgSize(u){
+  return new Promise(function(res){var im=new Image();im.onload=function(){res({w:im.naturalWidth||1,h:im.naturalHeight||1});};im.onerror=function(){res({w:4,h:3});};im.src=u;});
+}
+async function buildDocx(r){
+  await needLib('jszip');
+  var T=TABS[r.type],v=r.v,P=prof(),p=P.p,zip=new window.JSZip(),rels=[],media=0,docId=1;
+  async function pic(u,maxW,maxH){
+    var d=dataUrlBytes(u);if(!d){return '';}
+    var sz=await imgSize(u),k=Math.min(maxW/sz.w,maxH/sz.h),cx=Math.round(sz.w*k),cy=Math.round(sz.h*k);
+    media++;var name='image'+media+'.'+d.ext,rid='rId'+(media+10);
+    zip.file('word/media/'+name,d.bytes);rels.push('<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/'+name+'"/>');
+    var id=docId++;
+    return '<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="'+cx+'" cy="'+cy+'"/><wp:docPr id="'+id+'" name="Picture '+id+'"/><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="'+id+'" name="'+name+'"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="'+rid+'"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="'+cx+'" cy="'+cy+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>';
+  }
+  var body='';
+  var brand=wRun(p.school||'',{b:true,sz:26})+(p.eduDept?'<w:r><w:br/></w:r>'+wRun(p.eduDept,{sz:20,color:'5A6672'}):'');
+  var logo=P.logo?await pic(P.logo,900000,700000):'';
+  var headRight=wPara(wRun(T.title,{b:true,sz:40,color:'2D4A9E'}),{after:20})+wPara(p.teacher?wRun('المعلم: '+p.teacher,{sz:22,color:'5A6672'}):'',{after:0});
+  var headLeft=wPara(brand,{after:20})+(logo?wPara(logo,{after:0}):'');
+  body+=wTable([6200,4106],[wCell(6200,headRight,{noBorder:true})+wCell(4106,headLeft,{noBorder:true})],{noBorder:true});
+  /* info grid, three columns */
+  var cells=sheetCells(r),colW=Math.floor(DOCX_W/3),rows=[],cur=[],used=0;
+  cells.forEach(function(c){
+    var span=c[2]==='w3'?3:(c[2]==='w2'?2:1);
+    if(used+span>3){rows.push(cur.join(''));cur=[];used=0;}
+    var w=colW*span+(span===3?DOCX_W-colW*3:0);
+    cur.push(wCell(w,wPara(wRun(c[0],{sz:18,color:'5A6672'}),{after:0})+wPara(wRun(c[1]||' ',{b:true,sz:22}),{after:20}),{span:span>1?span:0}));
+    used+=span;
+    if(used===3){rows.push(cur.join(''));cur=[];used=0;}
+  });
+  if(cur.length){while(used<3){cur.push(wCell(colW,wPara('')));used++;}rows.push(cur.join(''));}
+  body+=wTable([colW,colW,DOCX_W-colW*2],rows);
+  T.sections.forEach(function(s){
+    body+=wPara(wRun(s.label,{b:true,sz:24,color:'FFFFFF'}),{fill:'2D4A9E',before:100,after:60,keep:true});
+    if(s.t==='pct'){
+      var x=v[s.id];body+=wTable([DOCX_W],[wCell(DOCX_W,wPara(wRun(x!==''&&x!=null?x+'%':' ',{b:true,sz:28}),{after:20}))]);
+      return;
+    }
+    var nc=gridClass(s.n)==='c2'?2:3,cw=Math.floor(DOCX_W/nc),rr=[],cc=[];
+    for(var i=0;i<s.n;i++){
+      cc.push(wCell(i%nc===nc-1?DOCX_W-cw*(nc-1):cw,wPara(wRun((i+1)+'. ',{b:true,color:'2D4A9E',sz:22})+wRun(v[s.id+'_'+i]||' ',{sz:22}),{after:20})));
+      if(cc.length===nc){rr.push(cc.join(''));cc=[];}
+    }
+    if(cc.length){while(cc.length<nc){cc.push(wCell(cw,wPara('')));}rr.push(cc.join(''));}
+    body+=wTable(Array.apply(null,Array(nc)).map(function(_,i){return i===nc-1?DOCX_W-cw*(nc-1):cw;}),rr);
+  });
+  if((r.imgs||[]).length){
+    body+=wPara(wRun('الشواهد المصورة',{b:true,color:'FFFFFF'}),{fill:'2D4A9E',before:100,after:60,keep:true});
+    var half=Math.floor(DOCX_W/2),ir=[],ic=[];
+    for(var j=0;j<r.imgs.length;j++){
+      ic.push(wCell(j%2===1?DOCX_W-half:half,wPara(await pic(r.imgs[j],3100000,2300000),{center:true,after:20})));
+      if(ic.length===2){ir.push(ic.join(''));ic=[];}
+    }
+    if(ic.length){ic.push(wCell(DOCX_W-half,wPara('')));ir.push(ic.join(''));}
+    body+=wTable([half,DOCX_W-half],ir);
+  }
+  var sig=P.sign?await pic(P.sign,1300000,520000):'',stamp=P.stamp?await pic(P.stamp,1000000,800000):'';
+  body+=wPara('',{before:200,after:0});
+  body+=wTable([Math.floor(DOCX_W/2),DOCX_W-Math.floor(DOCX_W/2)],[
+    wCell(Math.floor(DOCX_W/2),wPara(wRun('المعلم: ',{sz:20,color:'5A6672'})+wRun(p.teacher||'',{b:true,sz:22}),{after:40})+wPara(wRun('التوقيع: ',{sz:20,color:'5A6672'})+sig,{after:0})) +
+    wCell(DOCX_W-Math.floor(DOCX_W/2),wPara(wRun('مدير المدرسة: ',{sz:20,color:'5A6672'})+wRun(p.principal||'',{b:true,sz:22}),{after:40})+wPara(wRun('التوقيع والختم: ',{sz:20,color:'5A6672'})+stamp,{after:0}))
+  ],{noBorder:true});
+  var NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"';
+  var XML='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  zip.file('[Content_Types].xml',XML+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Default Extension="jpeg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');
+  zip.file('_rels/.rels',XML+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+  zip.file('word/_rels/document.xml.rels',XML+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'+rels.join('')+'</Relationships>');
+  zip.file('word/styles.xml',XML+'<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="ar-SA" w:bidi="ar-SA"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="60"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:uiPriority w:val="99"/><w:semiHidden/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>');
+  zip.file('word/document.xml',XML+'<w:document '+NS+'><w:body>'+body+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="900" w:right="800" w:bottom="900" w:left="800" w:header="500" w:footer="500" w:gutter="0"/><w:bidi/></w:sectPr></w:body></w:document>');
+  return await zip.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+
+/* ---------- grouping daily reports into weekly and monthly ones ---------- */
+function normPhrase(s){return String(s).replace(/[ً-ٟـ]/g,'').replace(/[.،؛:!؟?]+$/,'').replace(/\s+/g,' ').trim();}
+function freqList(reports,secId){
+  var map={},order=[];
+  reports.slice().sort(byDateDesc).forEach(function(r){
+    for(var i=0;i<10;i++){
+      var x=String(r.v[secId+'_'+i]||'').trim();if(!x){continue;}
+      var k=normPhrase(x);
+      if(!map[k]){map[k]={text:x,n:0};order.push(k);}
+      map[k].n++;
+    }
+  });
+  return order.map(function(k){return map[k];}).sort(function(a,b){return b.n-a.n;});
+}
+function topPhrases(reports,secIds,n){
+  var all=[],seen={};
+  secIds.forEach(function(id){freqList(reports,id).forEach(function(x){var k=normPhrase(x.text);if(!seen[k]){seen[k]=1;all.push(x);}});});
+  return all.slice(0,n).map(function(x){return x.text;});
+}
+function inRange(r,a,b){var d=r.v.date||'';return d>=a&&d<=b;}
+function emptyCells(r,s){
+  var out=[];
+  for(var i=0;i<s.n;i++){var key=s.id+'_'+i;if(!String(r.v[key]||'').trim()){out.push(key);}}
+  return out;
+}
+/* Fills only empty cells and returns how many it filled. */
+function fillList(r,s,arr){
+  var n=0,free=emptyCells(r,s);
+  for(var i=0;i<free.length&&i<arr.length;i++){r.v[free[i]]=String(arr[i]).trim().replace(/[.،؛:!؟?]+$/,'');n++;}
+  return n;
+}
+function sectionOf(T,id){return T.sections.filter(function(s){return s.id===id;})[0];}
+
+function sourcesFor(r){
+  var P=prof(),k=r.type,d=r.v.date;
+  if(!parseISO(d)){return null;}
+  if(k==='weekly'){
+    var w=weekRange(d);
+    return {kind:'week',range:w,daily:profReports('daily',P).filter(function(x){return inRange(x,w[0],w[1])&&!isBlank(x);}),weekly:[]};
+  }
+  var hk=hijriKey(d);
+  return {kind:'month',key:hk,
+    daily:profReports('daily',P).filter(function(x){return hijriKey(x.v.date)===hk&&!isBlank(x);}),
+    weekly:profReports('weekly',P).filter(function(x){return hijriKey(x.v.date)===hk&&!isBlank(x);})};
+}
+function localAggregate(r,src){
+  var T=TABS[r.type],n=0,d=src.daily,w=src.weekly;
+  function put(id,arr){var s=sectionOf(T,id);if(s&&arr.length){n+=fillList(r,s,arr);}}
+  function putPct(id,val){if(val!=null&&String(r.v[id]||'')===''){r.v[id]=String(val);n++;}}
+  if(r.type==='weekly'){
+    if(!String(r.v.topic||'').trim()){
+      r.v.topic='من '+shortHijri(src.range[0])+' إلى '+shortHijri(addDays(src.range[0],4));n++;
+    }
+    var topics=d.slice().sort(function(a,b){return (a.v.date||'')<(b.v.date||'')?-1:1;}).map(function(x){return String(x.v.topic||'').trim();}).filter(Boolean);
+    var seen={},uniq=[];topics.forEach(function(t){var k=normPhrase(t);if(!seen[k]){seen[k]=1;uniq.push(t);}});
+    put('lessons',uniq);
+    putPct('ach',avgOf(d.map(function(x){return numOf(x.v.ach);}).filter(function(x){return x!=null;})));
+    put('str',topPhrases(d,['ints'],3));
+    put('chal',topPhrases(d,['chas'],3));
+  }else{
+    if(!String(r.v.topic||'').trim()){r.v.topic=hijriMonthName(r.v.date);n++;}
+    var src2=w.length?w:d;
+    var achs=(w.length?w.map(function(x){return numOf(x.v.ach);}):[]).concat(d.map(function(x){return numOf(x.v.ach);})).filter(function(x){return x!=null;});
+    putPct('prog',avgOf(achs));
+    put('imps',topPhrases(w,['imp','str'],3).concat(topPhrases(d,['ints'],3)));
+    put('iss',topPhrases(w,['weak','chal'],3).concat(topPhrases(d,['chas'],3)));
+    put('plans',topPhrases(w,['rec','act'],3));
+  }
+  return n;
+}
+function digestOf(r,src){
+  var d=src.daily,w=src.weekly,L=[];
+  var topics=d.map(function(x){return String(x.v.topic||'').trim();}).filter(Boolean);
+  if(topics.length){L.push('الدروس المنفذة: '+topics.slice(0,12).join('، '));}
+  var a=avgOf(d.map(function(x){return numOf(x.v.ach);}).filter(function(x){return x!=null;}));
+  if(a!=null){L.push('متوسط تحقق الأهداف: '+a+'%');}
+  var i=topPhrases(d,['ints'],5);if(i.length){L.push('ملاحظات التفاعل المتكررة: '+i.join('، '));}
+  var c=topPhrases(d,['chas'],5);if(c.length){L.push('التحديات المتكررة: '+c.join('، '));}
+  ['weak','act','imp','rec'].forEach(function(id){
+    var t=topPhrases(w,[id],4);if(t.length){L.push(sectionLabel(TABS.weekly,id)+': '+t.join('، '));}
+  });
+  return L.join('\n');
+}
+
+/* ---------- files, sharing, export ---------- */
+var deferredInstall=null;
+function busy(btns,on){btns.forEach(function(b){b.disabled=on;});}
+function actBtns(a){return $$('[data-act="'+a+'"]');}
+function dataUrlToBlob(u){
+  var m=/^data:([^;]+);base64,(.*)$/.exec(u),bin=atob(m[2]),a=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++){a[i]=bin.charCodeAt(i);}
+  return new Blob([a],{type:m[1]});
+}
+async function saveFile(blob,name){
+  await capsReady;
+  if(caps.dl){await caps.dl.save({filename:name,data:blob});return true;}
+  if(window.claude){toast('التنزيل غير متاح في هذا العرض.');return false;}
+  var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(u);},4000);
+  return true;
+}
+/* A4 with 12 mm top and bottom margins; the sheet is 794 px wide, so one page holds about 1031 px of it. */
+var PDF_MARGIN=[12,0,12,0];
+function pageHeightPx(){return Math.floor((297-PDF_MARGIN[0]-PDF_MARGIN[2])/210*794);}
+/* Moves any block that would straddle a page edge to the top of the next page, so nothing is cut in half. */
+function keepBlocksWhole(sheet){
+  var H=pageHeightPx(),base=sheet.getBoundingClientRect().top;
+  Array.prototype.forEach.call(sheet.children,function(k,i){
+    var r=k.getBoundingClientRect(),top=r.top-base,bottom=r.bottom-base;
+    if(i===0||r.height>H){return;}
+    var edge=(Math.floor(top/H)+1)*H;
+    if(bottom>edge){
+      var m=parseFloat(getComputedStyle(k).marginTop)||0;
+      k.style.marginTop=(m+(edge-top)+3)+'px';
+    }
+  });
+}
+async function makePdf(r){
+  await needLib('html2pdf');
   var holder=$('#sheetHolder');
   try{
-    await capsReady;
-    holder.innerHTML=sheetHTML(S.tab);
+    holder.innerHTML=sheetHTML(r);
     if(document.fonts&&document.fonts.ready){await document.fonts.ready;}
+    await Promise.all($$('img',holder).map(function(im){return im.decode?im.decode().catch(function(){}):null;}));
     var el=holder.firstElementChild;
-    var blob=await html2pdf().set({
-      margin:0,
+    keepBlocksWhole(el);
+    return await html2pdf().set({
+      margin:PDF_MARGIN,
       image:{type:'jpeg',quality:0.95},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',windowWidth:794},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css'],avoid:['.sh-sec','.sh-sign']}
+      pagebreak:{mode:[]}
     }).from(el).outputPdf('blob');
-    var name='تقرير-'+TABS[S.tab].label+'-'+(S.t[S.tab].v.date||today())+'.pdf';
-    if(caps.dl){await caps.dl.save({filename:name,data:blob});toast('تم تجهيز الملف.');}
-    else if(!window.claude){
-      var u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
-      setTimeout(function(){URL.revokeObjectURL(u);},4000);toast('تم تنزيل الملف.');
-    }else{toast('التنزيل غير متاح في هذا العرض، استخدم نسخ التقرير كنص.');}
-  }catch(e){
-    if(e&&e.code==='declined'){toast('أُلغي حفظ الملف.');}
-    else{toast('تعذر إنشاء الملف، أعد المحاولة.');}
-  }finally{holder.innerHTML='';busy(btns,false);}
+  }finally{holder.innerHTML='';}
+}
+function failMsg(e,what){
+  if(e&&e.code==='declined'){toast('أُلغي حفظ الملف.');}
+  else if(e&&/load /.test(String(e.message))){toast('تعذر تحميل أداة إنشاء الملف، تحقق من الاتصال ثم أعد المحاولة.');}
+  else{toast('تعذر '+what+'، أعد المحاولة.');}
+}
+async function exportPdf(){
+  var btns=actBtns('pdf');busy(btns,true);toast('جارٍ تجهيز الملف...');
+  try{
+    var r=rep(),blob=await makePdf(r);
+    if(await saveFile(blob,fileBase(r)+'.pdf')){toast('تم تجهيز الملف.');}
+  }catch(e){failMsg(e,'إنشاء الملف');}
+  finally{busy(btns,false);}
+}
+async function exportDocx(){
+  var btns=actBtns('docx');busy(btns,true);toast('جارٍ تجهيز ملف وورد...');
+  try{
+    var r=rep(),blob=await buildDocx(r);
+    if(await saveFile(blob,fileBase(r)+'.docx')){toast('تم تجهيز ملف وورد.');}
+  }catch(e){failMsg(e,'إنشاء ملف وورد');}
+  finally{busy(btns,false);}
+}
+var pendingShare=null;
+async function shareReport(){
+  var r=rep(),T=TABS[r.type],title=T.title+(r.v.topic?' - '+r.v.topic:''),text=reportText(r);
+  var btns=actBtns('share');busy(btns,true);
+  try{
+    if(navigator.canShare&&navigator.share){
+      toast('جارٍ تجهيز الملف للمشاركة...');
+      var blob=await makePdf(r),file=new File([blob],fileBase(r)+'.pdf',{type:'application/pdf'});
+      if(navigator.canShare({files:[file]})){
+        try{await navigator.share({files:[file],title:title,text:title});return;}
+        catch(e){
+          if(e&&e.name==='AbortError'){return;}
+          if(e&&e.name==='NotAllowedError'){
+            pendingShare={files:[file],title:title,text:title};
+            openPicker({title:'الملف جاهز للمشاركة',items:[],html:true,empty:''});
+            $('#pickBody').innerHTML='<p class="muted pad">اضغط الزر لاختيار التطبيق الذي ترسل منه الملف.</p><div class="btnrow pad"><button type="button" class="btn primary" data-sharenow="1">'+icon('share')+'مشاركة الملف</button></div>';
+            return;
+          }
+        }
+      }
+    }
+    if(navigator.share){
+      try{await navigator.share({title:title,text:text});return;}catch(e2){if(e2&&e2.name==='AbortError'){return;}}
+    }
+    var w=window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener');
+    if(!w){await copyText();}
+  }catch(e3){failMsg(e3,'تجهيز المشاركة');}
+  finally{busy(btns,false);}
 }
 async function copyText(){
-  var t=reportText(S.tab);
+  var t=reportText(rep());
   try{await navigator.clipboard.writeText(t);toast('تم نسخ التقرير.');return;}catch(e){}
   try{
     var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
@@ -493,107 +1383,9 @@ async function copyText(){
     toast(ok?'تم نسخ التقرير.':'تعذر النسخ في هذا العرض.');
   }catch(e2){toast('تعذر النسخ في هذا العرض.');}
 }
-function setVal(key,val){
-  S.t[S.tab].v[key]=val;
-  var el=$('#t-'+key);if(el){el.value=val;}
-}
-async function askAI(prompt){
-  if(caps.ai){return await caps.ai.json(prompt,{modelTier:'quick'});}
-  var res=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
-  if(!res.ok){var er=new Error('http '+res.status);er.code=res.status===429?'rate_limited':'failed';throw er;}
-  var d=await res.json(),t=String(d.text||''),a=t.indexOf('{'),b=t.lastIndexOf('}');
-  if(a<0||b<=a){var e2=new Error('bad answer');e2.code='failed';throw e2;}
-  return JSON.parse(t.slice(a,b+1));
-}
-async function aiFill(){
-  var k=S.tab,T=TABS[k],v=S.t[k].v;
-  if(!String(v.topic||'').trim()){
-    toast('اكتب '+T.topic.label+' أولًا ليعتمد عليه الذكاء الاصطناعي.');
-    var f=$('#t-topic');if(f){f.focus();}return;
-  }
-  await capsReady;
-  if(!caps.ai&&!AI_ENDPOINT){toast('التعبئة الذكية غير متاحة في هذا العرض.');return;}
-  var btns=Array.prototype.slice.call(document.querySelectorAll('[data-act="ai"]'));
-  busy(btns,true);toast('جارٍ التعبئة...');
-  var spec=T.sections.filter(function(s){return s.ai;}).map(function(s){
-    return s.t==='list'
-      ? '"'+s.id+'": مصفوفة من '+s.n+' عبارات تمثل «'+s.label+'»'
-      : '"'+s.id+'": رقم صحيح بين '+s.ai[0]+' و '+s.ai[1]+' يمثل «'+s.label+'»';
-  }).join('\n');
-  var prompt='أنت خبير تربوي في التعليم العام بالمملكة العربية السعودية.\n'+
-    'اكتب محتوى '+T.title+' لمعلم'+(S.p.spec?' تخصصه '+S.p.spec:'')+(S.p.grade?' في '+S.p.grade:'')+'.\n'+
-    T.topic.label+': «'+v.topic+'».\n'+
-    'أعد كائن JSON فقط بلا شرح وبلا علامات كود، وفيه المفاتيح التالية:\n'+spec+'\n'+
-    'كل عبارة بحد أقصى 5 كلمات، بالعربية الفصحى المبسطة، بلا علامات ترقيم في النهاية، وبلا تكرار بين العبارات.';
-  try{
-    var r=await askAI(prompt);
-    var n=0;
-    if(r&&typeof r==='object'){
-      T.sections.forEach(function(s){
-        if(!s.ai||r[s.id]==null){return;}
-        if(s.t==='pct'){
-          var num=Math.round(Number(r[s.id]));
-          if(!isNaN(num)&&String(v[s.id]||'')===''){setVal(s.id,String(Math.max(0,Math.min(100,num))));n++;}
-        }else if(Array.isArray(r[s.id])){
-          for(var i=0;i<s.n;i++){
-            var key=s.id+'_'+i,x=r[s.id][i];
-            if(typeof x==='string'&&x.trim()&&!String(v[key]||'').trim()){setVal(key,x.trim().replace(/[.،؛:!؟?]+$/,''));n++;}
-          }
-        }
-      });
-    }
-    updateMeta();queueSave();
-    toast(n?('تمت تعبئة '+n+' خانة فارغة.'):'لا توجد خانات فارغة لتعبئتها.');
-  }catch(e){
-    if(e&&e.code==='not_granted'){document.body.classList.add('no-ai');toast('لم يُسمح باستخدام التعبئة الذكية.');}
-    else if(e&&e.code==='rate_limited'){toast('انتظر قليلًا ثم أعد المحاولة.');}
-    else{toast('تعذرت التعبئة الذكية، أعد المحاولة.');}
-  }finally{busy(btns,false);}
-}
-function demo(){
-  var k=S.tab,T=TABS[k],n=0;
-  PROFILE.forEach(function(f){
-    if(S.p[f.id]){return;}
-    S.p[f.id]=f.type==='select'?f.opts[0]:f.ph;n++;
-  });
-  if(!S.t[k].v.topic){S.t[k].v.topic=T.topic.ph;}
-  T.meta.forEach(function(m){if(!S.t[k].v[m.id]){S.t[k].v[m.id]=m.ph;}});
-  T.sections.forEach(function(s){
-    if(s.t==='pct'){if(!S.t[k].v[s.id]){S.t[k].v[s.id]=s.ph;}return;}
-    if(s.ai===false){return;}
-    for(var i=0;i<s.n;i++){var key=s.id+'_'+i;if(!S.t[k].v[key]){S.t[k].v[key]=s.ph[i]||s.ph[0];}}
-  });
-  var open=$('#prof')&&$('#prof').open;
-  renderForm();if(open&&$('#prof')){$('#prof').open=true;}
-  queueSave();toast('تمت إضافة بيانات تجريبية، عدّلها أو احذفها.');
-}
-function openDlg(){
-  lastFocus=document.activeElement;$('#dlg').hidden=false;$('#dlgOk').focus();
-}
-function closeDlg(){$('#dlg').hidden=true;if(lastFocus&&lastFocus.focus){lastFocus.focus();}}
-function clearTab(){
-  var k=S.tab;S.t[k]={v:{date:today()},imgs:[]};
-  closeDlg();renderForm();queueSave();toast('تم حذف بيانات التقرير.');
-}
-function layoutPreview(){
-  var body=$('#pvBody'),wrap=$('#pvWrap'),sheet=wrap.firstElementChild;
-  if(!sheet){return;}
-  var w=Math.min(794,body.clientWidth-28);if(w<200){w=200;}
-  var s=w/794;
-  sheet.style.transform='scale('+s+')';
-  wrap.style.width=w+'px';
-  wrap.style.height=Math.ceil(sheet.offsetHeight*s)+'px';
-}
-function openPreview(){
-  lastFocus=document.activeElement;
-  $('#pvWrap').innerHTML=sheetHTML(S.tab);
-  $('#pv').hidden=false;
-  layoutPreview();
-  $('#pvClose').focus();
-}
-function closePreview(){$('#pv').hidden=true;$('#pvWrap').innerHTML='';if(lastFocus&&lastFocus.focus){lastFocus.focus();}}
 
-function readImg(file){
+/* ---------- images ---------- */
+function readImg(file,max,type,q){
   return new Promise(function(res,rej){
     var fr=new FileReader();
     fr.onerror=rej;
@@ -601,11 +1393,13 @@ function readImg(file){
       var im=new Image();
       im.onerror=rej;
       im.onload=function(){
-        var M=1100,w=im.naturalWidth,h=im.naturalHeight,r=Math.min(1,M/Math.max(w,h));
-        w=Math.round(w*r);h=Math.round(h*r);
+        var M=max||1100,w=im.naturalWidth,h=im.naturalHeight,k=Math.min(1,M/Math.max(w,h));
+        w=Math.max(1,Math.round(w*k));h=Math.max(1,Math.round(h*k));
         var c=document.createElement('canvas');c.width=w;c.height=h;
-        var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
-        res(c.toDataURL('image/jpeg',0.72));
+        var x=c.getContext('2d');
+        if(type!=='png'){x.fillStyle='#fff';x.fillRect(0,0,w,h);}
+        x.drawImage(im,0,0,w,h);
+        res(type==='png'?c.toDataURL('image/png'):c.toDataURL('image/jpeg',q||0.72));
       };
       im.src=fr.result;
     };
@@ -613,69 +1407,587 @@ function readImg(file){
   });
 }
 async function addImages(files){
-  var list=S.t[S.tab].imgs,room=MAXIMG-list.length;
+  var r=rep(),list=r.imgs,room=MAXIMG-list.length;
   if(room<=0){toast('الحد الأقصى '+MAXIMG+' صور.');return;}
   var pick=Array.prototype.slice.call(files).slice(0,room);
   if(files.length>room){toast('أُضيف '+room+' فقط، فالحد الأقصى '+MAXIMG+' صور.');}
   for(var i=0;i<pick.length;i++){
     try{list.push(await readImg(pick[i]));}catch(e){toast('تعذرت قراءة إحدى الصور.');}
   }
-  var open=$('#prof')&&$('#prof').open;
-  renderForm();if(open&&$('#prof')){$('#prof').open=true;}
-  queueSave();
+  touch(r);renderAll(true);queueSave();
+}
+async function setIdent(kind,file){
+  try{
+    var P=prof();P[kind]=await readImg(file,kind==='logo'?420:520,'png');touchProfile();
+    renderView();queueSave();toast('تم حفظ الصورة.');
+  }catch(e){toast('تعذرت قراءة الصورة.');}
 }
 
-/* ---------- wiring ---------- */
+/* ---------- AI ---------- */
+/* Inside the Claude viewer only its own capability works; the relay Worker accepts requests from the published site alone. */
+function aiReady(){return !!(caps.ai||(!window.claude&&AI_ENDPOINT));}
+function aiError(code){var e=new Error(code);e.code=code;return e;}
+async function askAI(prompt,imgs,fresh){
+  if(caps.ai){
+    var opts={modelTier:'quick'};
+    if(fresh){opts.cache=false;}
+    if(imgs&&imgs.length){
+      if(!caps.aiImages){throw aiError('no_images');}
+      opts.images=imgs.map(dataUrlToBlob);
+    }
+    return await caps.ai.json(prompt,opts);
+  }
+  if(!AI_ENDPOINT||window.claude){throw aiError('unavailable');}
+  var body={prompt:prompt};if(imgs&&imgs.length){body.images=imgs;}
+  var res=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok){throw aiError(res.status===429?'rate_limited':(res.status===413?'too_big':'failed'));}
+  var d=await res.json(),t=String(d.text||''),a=t.indexOf('{'),b=t.lastIndexOf('}');
+  if(a<0||b<=a){throw aiError('failed');}
+  try{return JSON.parse(t.slice(a,b+1));}catch(e){throw aiError('failed');}
+}
+function aiFail(e){
+  if(e&&e.code==='not_granted'){document.body.classList.add('no-ai');toast('لم يُسمح باستخدام الذكاء الاصطناعي.');}
+  else if(e&&e.code==='rate_limited'){toast('بلغت الحد المسموح حاليًا، حاول لاحقًا.');}
+  else if(e&&(e.code==='no_images'||e.code==='images_unavailable')){toast('قراءة الصور غير متاحة في هذا العرض.');}
+  else if(e&&e.code==='image_rejected'){toast('تعذر استخدام هذه الصورة، جرّب صورة أخرى.');}
+  else if(e&&e.code==='too_big'){toast('الصورة كبيرة، جرّب صورة أوضح وأصغر.');}
+  else{toast('تعذر تنفيذ الطلب، أعد المحاولة.');}
+}
+function ctxLine(r){
+  var T=TABS[r.type],p=prof().p;
+  return 'أنت خبير تربوي في التعليم العام بالمملكة العربية السعودية.\n'+
+    'السياق: '+T.title+' لمعلم'+(p.spec?' تخصصه '+p.spec:'')+(p.grade?' في '+p.grade:'')+'.\n'+
+    T.topic.label+': «'+(r.v.topic||'')+'».\n';
+}
+function specFor(secs){
+  return secs.map(function(s){
+    var what=s.hint||s.label;
+    return s.t==='list'
+      ? '"'+s.id+'": مصفوفة من '+s.n+' عبارات تمثل «'+what+'»'
+      : '"'+s.id+'": رقم صحيح بين '+s.ai[0]+' و '+s.ai[1]+' يمثل «'+what+'»';
+  }).join('\n');
+}
+var STYLE_RULE='كل عبارة بحد أقصى 5 كلمات، بالعربية الفصحى المبسطة، بلا علامات ترقيم في النهاية، وبلا تكرار بين العبارات.';
+/* Applies an AI answer to empty cells only and returns how many were filled. */
+function applyAnswer(r,ans){
+  var T=TABS[r.type],n=0;
+  if(!ans||typeof ans!=='object'){return 0;}
+  T.sections.forEach(function(s){
+    if(!s.ai||ans[s.id]==null){return;}
+    if(s.t==='pct'){
+      var num=Math.round(Number(ans[s.id]));
+      if(!isNaN(num)&&String(r.v[s.id]||'')===''){r.v[s.id]=String(Math.max(0,Math.min(100,num)));n++;}
+    }else if(Array.isArray(ans[s.id])){
+      n+=fillList(r,s,ans[s.id].filter(function(x){return typeof x==='string'&&x.trim();}));
+    }
+  });
+  return n;
+}
+function refreshFields(r){
+  $$('#form [data-s="t"]').forEach(function(el){var k=el.dataset.k;if(r.v[k]!=null&&el.value!==String(r.v[k])){el.value=r.v[k];}});
+  updateMeta();
+}
+async function aiFill(){
+  var r=rep(),T=TABS[r.type];
+  if(!String(r.v.topic||'').trim()){
+    toast('اكتب '+T.topic.label+' أولًا ليعتمد عليه الذكاء الاصطناعي.');
+    var f=$('#t-topic');if(f){f.focus();}return;
+  }
+  await capsReady;
+  if(!aiReady()){toast('التعبئة الذكية غير متاحة في هذا العرض.');return;}
+  var btns=actBtns('ai');busy(btns,true);toast('جارٍ التعبئة...');
+  var secs=T.sections.filter(function(s){return s.ai;});
+  var prompt=ctxLine(r)+'أعد كائن JSON فقط بلا شرح وبلا علامات كود، وفيه المفاتيح التالية:\n'+specFor(secs)+'\n'+STYLE_RULE;
+  try{
+    var n=applyAnswer(r,await askAI(prompt));
+    touch(r);refreshFields(r);queueSave();
+    toast(n?('تمت تعبئة '+n+' خانة فارغة.'):'لا توجد خانات فارغة لتعبئتها.');
+  }catch(e){aiFail(e);}
+  finally{busy(btns,false);}
+}
+async function cellAI(key){
+  var r=rep(),T=TABS[r.type],m=/^(.*)_(\d+)$/.exec(key),s=m&&sectionOf(T,m[1]);
+  if(!s){return;}
+  if(!String(r.v.topic||'').trim()){toast('اكتب '+T.topic.label+' أولًا ليعتمد عليه الذكاء الاصطناعي.');var f=$('#t-topic');if(f){f.focus();}return;}
+  await capsReady;
+  if(!aiReady()){toast('الذكاء الاصطناعي غير متاح في هذا العرض.');return;}
+  var cur=String(r.v[key]||'').trim(),others=[];
+  for(var i=0;i<s.n;i++){var k2=s.id+'_'+i,x=String(r.v[k2]||'').trim();if(k2!==key&&x){others.push(x);}}
+  var btn=$('[data-cellai="'+key+'"]');if(btn){btn.disabled=true;}
+  toast('جارٍ توليد الاقتراحات...');
+  var prompt=ctxLine(r)+'القسم: «'+(s.hint||s.label)+'».\n'+
+    (cur?'العبارة الحالية: «'+cur+'». اكتب 4 صياغات بديلة لها بالمعنى نفسه.\n':'اقترح 4 عبارات مناسبة لخانة جديدة في هذا القسم.\n')+
+    (others.length?'لا تكرر هذه العبارات الموجودة: '+others.join('، ')+'.\n':'')+
+    'أعد JSON فقط على الشكل {"options":["...","...","...","..."]}.\n'+STYLE_RULE;
+  try{
+    var ans=await askAI(prompt,null,true),opts=(ans&&Array.isArray(ans.options)?ans.options:[]).filter(function(x){return typeof x==='string'&&x.trim();}).map(function(x){return x.trim().replace(/[.،؛:!؟?]+$/,'');}).slice(0,5);
+    if(!opts.length){toast('لم تصل اقتراحات، أعد المحاولة.');return;}
+    $('#toast').classList.remove('on');
+    openPicker({title:cur?'صياغات بديلة':'اقتراحات للخانة',items:opts.map(function(x,i){return {id:String(i),label:x};}),onPick:function(id){
+      var r2=rep();r2.v[key]=opts[+id];touch(r2);var el=$('#t-'+key);if(el){el.value=opts[+id];}updateMeta();queueSave();
+    }});
+  }catch(e){aiFail(e);}
+  finally{if(btn){btn.disabled=false;}}
+}
+async function bookRead(file){
+  var r=rep();
+  await capsReady;
+  if(!aiReady()){toast('الذكاء الاصطناعي غير متاح في هذا العرض.');return;}
+  toast('جارٍ قراءة الصفحة...');
+  try{
+    var data=await readImg(file,1100,'jpeg',0.7);
+    var prompt='أنت خبير تربوي في التعليم العام بالمملكة العربية السعودية.\n'+
+      'هذه صورة صفحة من كتاب مدرسي أو دفتر تحضير'+(prof().p.spec?' في مادة '+prof().p.spec:'')+'.\n'+
+      'استخرج منها: عنوان الدرس كما يظهر، واسم الوحدة إن ظهر وإلا اتركه فارغًا، ثم اكتب 6 أهداف سلوكية مناسبة للدرس.\n'+
+      'أعد JSON فقط بلا شرح على الشكل {"topic":"...","unit":"...","objs":["...","...","...","...","...","..."]}.\n'+
+      'كل هدف يبدأ بفعل مضارع بحد أقصى 5 كلمات، وبلا علامات ترقيم في النهاية. إن لم تكن الصورة صفحة درس فأعد {"topic":"","unit":"","objs":[]}.';
+    var ans=await askAI(prompt,[data]),n=0;
+    if(ans&&typeof ans==='object'){
+      if(typeof ans.topic==='string'&&ans.topic.trim()&&!String(r.v.topic||'').trim()){r.v.topic=ans.topic.trim();n++;}
+      if(typeof ans.unit==='string'&&ans.unit.trim()&&!String(r.v.unit||'').trim()){r.v.unit=ans.unit.trim();n++;}
+      if(Array.isArray(ans.objs)){n+=fillList(r,sectionOf(TABS.daily,'objs'),ans.objs.filter(function(x){return typeof x==='string'&&x.trim();}));}
+    }
+    touch(r);refreshFields(r);queueSave();
+    toast(n?('قُرئت الصفحة وتمت تعبئة '+n+' خانة.'):'لم أجد درسًا واضحًا في الصورة، جرّب صورة أقرب.');
+  }catch(e){aiFail(e);}
+}
+async function aggregate(){
+  var r=rep(),T=TABS[r.type],src=sourcesFor(r);
+  if(!src){toast('اختر تاريخ التقرير أولًا.');return;}
+  if(!src.daily.length){toast(src.kind==='week'?'لا توجد تقارير يومية محفوظة في أسبوع هذا التاريخ.':'لا توجد تقارير يومية محفوظة في شهر هذا التاريخ.');return;}
+  var btns=actBtns('aggregate');busy(btns,true);
+  try{
+    var n=localAggregate(r,src);
+    var secs=T.sections.filter(function(s){return s.ai&&s.t==='list'&&emptyCells(r,s).length;});
+    await capsReady;
+    if(secs.length&&aiReady()){
+      toast('جارٍ إكمال بقية الأقسام بالذكاء الاصطناعي...');
+      try{
+        var prompt=ctxLine(r)+'ملخص تقارير '+(src.kind==='week'?'الأسبوع':'الشهر')+':\n'+digestOf(r,src)+'\n\n'+
+          'اعتمادًا على هذا الملخص فقط اكتب محتوى الأقسام التالية، وأعد كائن JSON فقط بلا شرح وبلا علامات كود:\n'+specFor(secs)+'\n'+STYLE_RULE;
+        n+=applyAnswer(r,await askAI(prompt));
+      }catch(e){aiFail(e);}
+    }
+    touch(r);renderAll(true);queueSave();
+    toast(n?('تمت تعبئة '+n+' خانة من '+src.daily.length+' تقرير يومي.'):'كل الخانات القابلة للتعبئة ممتلئة.');
+  }finally{busy(btns,false);}
+}
+
+/* ---------- report management ---------- */
+function openReport(id){
+  var r=S.reports[id];if(!r||r.deleted){return;}
+  prof().cur[r.type]=id;S.tab=r.type;S.view='edit';renderAll();queueSave();window.scrollTo({top:0});
+}
+function copyOf(from){
+  var cur=rep(from.type);
+  if(isBlank(cur)&&cur.id!==from.id){
+    Object.keys(from.v).forEach(function(k){if(k!=='date'){cur.v[k]=from.v[k];}});
+    touch(cur);return cur;
+  }
+  return newReport(from.type,from);
+}
+function newRep(){
+  var cur=rep();
+  if(isBlank(cur)){toast('التقرير الحالي فارغ، ابدأ الكتابة فيه.');var f=$('#t-topic');if(f){f.focus();}return;}
+  newReport(S.tab);renderAll(true);queueSave();
+  toast('بدأ تقرير جديد، والسابق محفوظ في الأرشيف.');
+  var f2=$('#t-topic');if(f2){f2.focus();}
+}
+function copyPrev(){
+  var cur=rep(),list=profReports(S.tab).filter(function(r){return r.id!==cur.id&&!isBlank(r);}).sort(byDateDesc).slice(0,15);
+  openPicker({title:'نسخ من تقرير سابق',empty:'لا توجد تقارير سابقة من هذا النوع.',items:list.map(function(r){return {id:r.id,label:reportTitle(r),sub:reportSub(r)};}),onPick:function(id){
+    var from=S.reports[id];if(!from){return;}
+    copyOf(from);renderAll(true);queueSave();toast('نُسخ المحتوى، عدّل التاريخ والتفاصيل.');
+  }});
+}
+function chooseType(){
+  openPicker({title:'أنواع أخرى من التقارير',items:MORE_TABS.map(function(k){return {id:k,label:TABS[k].label};}),onPick:function(id){setTab(id);}});
+}
+function pickStudents(secId){
+  var P=prof(),r=rep(),s=sectionOf(TABS[r.type],secId);
+  if(!s){return;}
+  var taken={};for(var i=0;i<s.n;i++){var x=String(r.v[s.id+'_'+i]||'').trim();if(x){taken[x]=1;}}
+  var free=emptyCells(r,s).length;
+  if(!free){toast('كل خانات هذا القسم ممتلئة.');return;}
+  openPicker({title:'اختر الطلاب (حتى '+free+')',multi:true,okLabel:'إضافة المحدد',empty:'أضف أسماء الطلاب من صفحة الإعدادات أولًا.',
+    items:P.students.filter(function(n){return !taken[n];}).map(function(n){return {id:n,label:n};}),
+    onPick:function(ids){
+      var r2=rep(),n=fillList(r2,s,ids);touch(r2);renderAll(true);queueSave();
+      toast(n?('أُضيف '+n+' من الأسماء.'):'لم يُضف شيء.');
+    }});
+}
+function demo(){
+  var r=rep(),T=TABS[r.type],P=prof();
+  PROFILE.forEach(function(f){if(P.p[f.id]){return;}P.p[f.id]=f.type==='select'?f.opts[0]:f.ph;});
+  touchProfile();
+  if(!r.v.topic){r.v.topic=T.topic.ph;}
+  T.meta.forEach(function(m){if(!r.v[m.id]){r.v[m.id]=m.ph;}});
+  T.sections.forEach(function(s){
+    if(s.t==='pct'){if(!r.v[s.id]){r.v[s.id]=s.ph;}return;}
+    if(s.ai===false){return;}
+    for(var i=0;i<s.n;i++){var key=s.id+'_'+i;if(!r.v[key]){r.v[key]=s.ph[i]||s.ph[0];}}
+  });
+  touch(r);renderAll(true);queueSave();toast('تمت إضافة بيانات تجريبية، عدّلها أو احذفها.');
+}
+function clearReport(){
+  openDlg({title:'حذف هذا التقرير؟',text:'سيُحذف التقرير وصوره من الأرشيف أيضًا.',ok:'حذف التقرير',onOk:function(){
+    removeReport(rep());closeDlg();renderAll();queueSave();toast('تم حذف التقرير.');
+  }});
+}
+function newProfile(){
+  var cur=prof(),P=blankProfile();
+  ['eduDept','school','term','teacher','principal'].forEach(function(k){if(cur.p[k]){P.p[k]=cur.p[k];}});
+  P.logo=cur.logo;P.sign=cur.sign;P.stamp=cur.stamp;
+  S.profiles.push(P);S.pid=P.id;renderAll();queueSave();window.scrollTo({top:0});
+  toast('ملف جديد بنفس بيانات المدرسة، أضف التخصص والصف.');
+  var el=$('#pname');if(el){el.focus();}
+}
+function deleteProfile(){
+  var P=prof();if(liveProfiles().length<2){return;}
+  openDlg({title:'حذف هذا الملف؟',text:'ستُحذف كل تقارير هذا الملف من هذا الجهاز.',ok:'حذف الملف',onOk:function(){
+    Object.keys(S.reports).forEach(function(id){var r=S.reports[id];if(r.pid===P.id&&!r.deleted){removeReport(r);}});
+    P.deleted=true;P.updatedAt=Date.now();
+    var l=liveProfiles();S.pid=l[0].id;
+    closeDlg();renderAll();queueSave();toast('تم حذف الملف.');
+  }});
+}
+
+/* ---------- backup ---------- */
+async function backup(){
+  var blob=new Blob([JSON.stringify(exportState(false))],{type:'application/json'});
+  if(await saveFile(blob,'teacher-reports-backup-'+today()+'.json')){toast('تم تجهيز النسخة الاحتياطية.');}
+}
+async function restore(file){
+  try{
+    var o=JSON.parse(await file.text());
+    if(!o||o.v!==2||!Array.isArray(o.profiles)||!o.reports){toast('هذا الملف ليس نسخة احتياطية صالحة.');return;}
+    var n=mergeState(o,false);
+    renderAll();queueSave();
+    toast(n?('تم استيراد '+n+' عنصرًا ودمجها مع بياناتك.'):'لا جديد في هذه النسخة، بياناتك محدّثة.');
+  }catch(e){toast('تعذرت قراءة الملف.');}
+}
+async function installApp(){
+  if(!deferredInstall){return;}
+  deferredInstall.prompt();
+  try{await deferredInstall.userChoice;}catch(e){}
+  deferredInstall=null;renderView();
+}
+
+/* ---------- capabilities ---------- */
 var capsReady=(async function(){
   var C=window.claude;
   if(!C||!C.use){document.body.classList.toggle('no-ai',!AI_ENDPOINT);return;}
   try{
     var r=await Promise.all([C.use('downloads').catch(function(){return null;}),C.use('sample').catch(function(){return null;})]);
     caps.dl=r[0];caps.ai=r[1];
+    if(caps.ai&&caps.ai.limits){try{caps.aiImages=!!((await caps.ai.limits()).images);}catch(e){}}
   }catch(e){}
-  document.body.classList.toggle('no-ai',!caps.ai&&!AI_ENDPOINT);
+  document.body.classList.toggle('no-ai',!aiReady());
 })();
 
-document.addEventListener('input',function(e){
-  var t=e.target;if(!t.dataset||!t.dataset.k){return;}
-  var val=t.value;
-  if(t.type==='number'&&val!==''){var n=Number(val);if(n>100){val='100';t.value=val;}if(n<0){val='0';t.value=val;}}
-  if(t.dataset.s==='p'){S.p[t.dataset.k]=val;}
-  else{S.t[S.tab].v[t.dataset.k]=val;}
-  if(t.dataset.s==='t'){updateMeta();}
-  queueSave();
-});
-document.addEventListener('change',function(e){
-  var t=e.target;
-  if(t.id==='file'&&t.files&&t.files.length){addImages(t.files);t.value='';}
-  else if(t.dataset&&t.dataset.k&&t.tagName==='SELECT'){S.p[t.dataset.k]=t.value;queueSave();}
-});
+/* ---------- sync between devices without accounts ----------
+   A random code is the only secret. Its hash names the record on the server and a key derived from it
+   encrypts the data in the browser, so the server stores ciphertext it cannot read. Images stay on each device. */
+var SYNC_OK=!!SYNC_ENDPOINT&&location.origin==='https://salmilabi.github.io';
+var SY={code:'',last:0,hash:'',busy:false,msg:'',kind:'',k:null,timer:null};
+var CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+var CODE_LEN=20;
+
+function newCode(){
+  var a=new Uint8Array(CODE_LEN),s='';
+  crypto.getRandomValues(a);
+  for(var i=0;i<CODE_LEN;i++){s+=CODE_CHARS[a[i]&31];}
+  return s;
+}
+function showCode(c){return c.replace(/(.{4})(?=.)/g,'$1-');}
+function cleanCode(s){
+  var t=String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,''),o='';
+  for(var i=0;i<t.length;i++){if(CODE_CHARS.indexOf(t[i])>-1){o+=t[i];}}
+  return o;
+}
+function hex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0');}).join('');}
+function b64enc(buf){
+  var a=new Uint8Array(buf),s='';
+  for(var i=0;i<a.length;i+=0x8000){s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000));}
+  return btoa(s);
+}
+function b64dec(t){var s=atob(t),a=new Uint8Array(s.length);for(var i=0;i<s.length;i++){a[i]=s.charCodeAt(i);}return a;}
+
+async function deriveSync(code){
+  var enc=new TextEncoder();
+  var id=hex(await crypto.subtle.digest('SHA-256',enc.encode('tr-sync-id:'+code))).slice(0,40);
+  var base=await crypto.subtle.importKey('raw',enc.encode(code),'PBKDF2',false,['deriveKey']);
+  var key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:enc.encode('tr-sync-key-v1'),iterations:120000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  return {id:id,key:key};
+}
+async function syncKey(){
+  if(!SY.k||SY.k.code!==SY.code){var d=await deriveSync(SY.code);d.code=SY.code;SY.k=d;}
+  return SY.k;
+}
+async function sealState(obj,key){
+  var iv=crypto.getRandomValues(new Uint8Array(12));
+  var ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(obj)));
+  return {iv:b64enc(iv),ct:b64enc(ct),t:Date.now()};
+}
+async function openState(o,key){
+  var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64dec(o.iv)},key,b64dec(o.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function hashState(st){
+  var core=JSON.stringify({p:st.profiles,r:st.reports});
+  return hex(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(core)));
+}
+function saveSync(){return kvSet('sync',{code:SY.code,last:SY.last,hash:SY.hash});}
+async function loadSync(){
+  try{var o=await kvGet('sync');if(o&&o.code){SY.code=o.code;SY.last=o.last||0;SY.hash=o.hash||'';}}catch(e){}
+}
+function syncErr(code){var e=new Error(code);e.code=code;return e;}
+function pristine(){
+  var l=liveProfiles();
+  if(l.length!==1){return false;}
+  var P=l[0];
+  if(P.name||P.logo||P.sign||P.stamp||P.students.length){return false;}
+  if(Object.keys(P.p).some(function(k){return String(P.p[k]||'').trim();})){return false;}
+  return !Object.keys(S.reports).some(function(id){var r=S.reports[id];return !r.deleted&&!isBlank(r);});
+}
+function typing(){var a=document.activeElement;return !!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&$('#form').contains(a));}
+function setSyncMsg(kind,msg){SY.kind=kind;SY.msg=msg;updateSyncCard();}
+function updateSyncCard(){
+  var c=$('#syncCard');
+  if(c&&S.view==='settings'&&!(document.activeElement&&c.contains(document.activeElement)&&document.activeElement.id==='syncJoin')){c.outerHTML=syncCardHTML();}
+}
+function whenText(t){
+  if(!t){return 'لم تتم المزامنة بعد';}
+  var m=Math.round((Date.now()-t)/60000);
+  if(m<1){return 'الآن';}
+  if(m<60){return 'قبل '+m+' دقيقة';}
+  var h=Math.round(m/60);
+  if(h<24){return 'قبل '+h+' ساعة';}
+  return 'قبل '+Math.round(h/24)+' يومًا';
+}
+function syncCardHTML(){
+  if(!SYNC_OK){
+    return '<section class="card" id="syncCard"><h2>المزامنة بين الأجهزة</h2><p class="muted">المزامنة متاحة من الصفحة المنشورة على الموقع فقط. افتحها من هناك لتفعيلها.</p></section>';
+  }
+  var msg=SY.msg?'<p class="sync-msg '+SY.kind+'" role="status">'+esc(SY.msg)+'</p>':'';
+  if(!SY.code){
+    return '<section class="card" id="syncCard"><h2>المزامنة بين الأجهزة <small>بلا حساب ولا كلمة مرور</small></h2>'+
+      '<p class="muted">تجمع تقاريرك على هاتفك وحاسوبك. تُشفَّر البيانات في جهازك قبل الإرسال برمز سري تحتفظ به أنت، فلا يستطيع الخادم قراءتها. الصور تبقى على كل جهاز ولا تُرفع.</p>'+
+      '<div class="btnrow"><button type="button" class="btn primary" data-sync="on"'+(SY.busy?' disabled':'')+'>'+icon('sync')+'تفعيل المزامنة في هذا الجهاز</button></div>'+
+      '<div class="sync-join"><input type="text" id="syncJoin" placeholder="لدي رمز من جهاز آخر" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="رمز المزامنة"><button type="button" class="btn" data-sync="join"'+(SY.busy?' disabled':'')+'>ربط</button></div>'+msg+'</section>';
+  }
+  return '<section class="card" id="syncCard"><h2>المزامنة بين الأجهزة <small>مفعّلة</small></h2>'+
+    '<p class="muted">اكتب هذا الرمز في الجهاز الآخر من خانة «لدي رمز». احتفظ به في مكان آمن: من يملكه يستطيع قراءة بياناتك، وإن ضاع لا يمكن استرجاعه.</p>'+
+    '<div class="sync-code" aria-label="رمز المزامنة">'+esc(showCode(SY.code))+'</div>'+
+    '<div class="btnrow"><button type="button" class="btn primary" data-sync="now"'+(SY.busy?' disabled':'')+'>'+icon('sync')+(SY.busy?'جارٍ المزامنة...':'مزامنة الآن')+'</button>'+
+    '<button type="button" class="btn" data-sync="copy">'+icon('copy')+'نسخ الرمز</button>'+
+    '<button type="button" class="btn" data-sync="off">إيقاف في هذا الجهاز</button>'+
+    '<button type="button" class="btn danger" data-sync="wipe">'+icon('trash')+'حذف النسخة السحابية</button></div>'+
+    '<p class="sync-msg">آخر مزامنة: '+whenText(SY.last)+'</p>'+msg+'</section>';
+}
+
+async function syncRequest(method,id,body){
+  var h={'X-Sync-Id':id};
+  if(body){h['Content-Type']='application/json';}
+  var res=await fetch(SYNC_ENDPOINT,{method:method,headers:h,body:body?JSON.stringify(body):undefined});
+  return res;
+}
+/* opts.join: the remote copy must already exist (guards against a mistyped code). */
+async function syncNow(opts){
+  opts=opts||{};
+  if(!SYNC_OK||!SY.code||SY.busy){return false;}
+  SY.busy=true;SY.msg='';updateSyncCard();
+  try{
+    var k=await syncKey(),res=await syncRequest('GET',k.id),changed=0,exists=false;
+    if(res.status===200){
+      exists=true;
+      var remote=await openState(await res.json(),k.key).catch(function(){throw syncErr('decrypt');});
+      /* A device that was never used adopts the synced profiles instead of keeping an empty one beside them. */
+      if(pristine()){S.profiles=[];S.reports={};}
+      changed=mergeState(remote,true);
+    }else if(res.status===404){
+      if(opts.join){throw syncErr('notfound');}
+    }else{throw syncErr(res.status===429?'rate':'http');}
+    if(changed){await saveNow();if(!typing()){renderAll(true);}}
+    var st=exportState(true),h=await hashState(st);
+    if(!exists||h!==SY.hash){
+      var put=await syncRequest('PUT',k.id,await sealState(st,k.key));
+      if(put.status===413){throw syncErr('big');}
+      if(put.status===429){throw syncErr('rate');}
+      if(!put.ok){throw syncErr('http');}
+    }
+    SY.hash=h;SY.last=Date.now();await saveSync();
+    SY.busy=false;
+    setSyncMsg('ok',changed?('تم دمج '+changed+' عنصرًا من أجهزتك الأخرى.'):'البيانات متطابقة.');
+    return true;
+  }catch(e){
+    SY.busy=false;
+    var m={notfound:'لم يُعثر على بيانات بهذا الرمز. تأكد من كتابته كما هو.',decrypt:'تعذر فك التشفير. الرمز غير صحيح.',rate:'طلبات كثيرة، حاول بعد قليل.',big:'حجم البيانات أكبر من المسموح.'}[e&&e.code]||'تعذرت المزامنة، تحقق من الاتصال وحاول مرة أخرى.';
+    if(e&&(e.code==='notfound'||e.code==='decrypt')&&opts.join){SY.code='';SY.k=null;await saveSync();}
+    setSyncMsg('err',m);
+    return false;
+  }
+}
+function schedulePush(){
+  if(!SYNC_OK||!SY.code){return;}
+  clearTimeout(SY.timer);
+  SY.timer=setTimeout(function(){syncNow();},6000);
+}
+saveHooks.push(schedulePush);
+
+async function syncAction(a){
+  if(!SYNC_OK){return;}
+  if(a==='on'){
+    if(!(window.crypto&&crypto.subtle)){setSyncMsg('err','هذا المتصفح لا يدعم التشفير المطلوب.');return;}
+    SY.code=newCode();SY.k=null;SY.hash='';SY.last=0;await saveSync();
+    await syncNow();
+  }else if(a==='join'){
+    var c=cleanCode($('#syncJoin').value);
+    if(c.length!==CODE_LEN){setSyncMsg('err','الرمز يتكون من '+CODE_LEN+' حرفًا ورقمًا، تأكد من نسخه كاملًا.');return;}
+    if(!(window.crypto&&crypto.subtle)){setSyncMsg('err','هذا المتصفح لا يدعم التشفير المطلوب.');return;}
+    SY.code=c;SY.k=null;SY.hash='';SY.last=0;
+    await syncNow({join:true});
+    if(SY.code){await saveSync();}
+  }else if(a==='now'){
+    await syncNow();
+  }else if(a==='copy'){
+    try{await navigator.clipboard.writeText(SY.code);toast('تم نسخ الرمز.');}catch(e){toast('تعذر النسخ، انسخ الرمز يدويًا.');}
+  }else if(a==='off'){
+    openDlg({title:'إيقاف المزامنة في هذا الجهاز؟',text:'تبقى بياناتك هنا وفي السحابة، ولن يتبادل هذا الجهاز التحديثات حتى تعيد الربط بالرمز.',ok:'إيقاف',onOk:async function(){
+      SY.code='';SY.k=null;SY.last=0;SY.hash='';SY.msg='';await saveSync();closeDlg();updateSyncCard();toast('أُوقفت المزامنة في هذا الجهاز.');
+    }});
+  }else if(a==='wipe'){
+    openDlg({title:'حذف النسخة السحابية؟',text:'يُحذف ما على الخادم نهائيًا وتتوقف المزامنة في هذا الجهاز، وبياناتك على الأجهزة تبقى كما هي. أوقف المزامنة في أجهزتك الأخرى أولًا، وإلا أعادت رفع نسخة عند أول مزامنة.',ok:'حذف من السحابة',onOk:async function(){
+      closeDlg();
+      try{
+        var k=await syncKey(),res=await syncRequest('DELETE',k.id);
+        if(!res.ok&&res.status!==404){throw syncErr('http');}
+        SY.code='';SY.k=null;SY.last=0;SY.hash='';SY.msg='';await saveSync();updateSyncCard();toast('حُذفت النسخة السحابية.');
+      }catch(e){setSyncMsg('err','تعذر الحذف، تحقق من الاتصال وحاول مرة أخرى.');}
+    }});
+  }
+}
+
+/* ---------- events ---------- */
+var ACTS={
+  ai:aiFill,preview:openPreview,pdf:exportPdf,share:shareReport,docx:exportDocx,copy:copyText,demo:demo,clear:clearReport,
+  newrep:newRep,copyprev:copyPrev,aggregate:aggregate,moretypes:chooseType,newprof:newProfile,delprof:deleteProfile,
+  backup:backup,install:installApp,
+  book:function(){$('#bookFile').click();},
+  more:function(){A.n+=30;renderView();}
+};
 document.addEventListener('click',function(e){
-  var el=e.target.closest('[data-tab],[data-act],[data-del],[data-dlg],[data-pvclose]');
-  if(!el){return;}
-  if(el.dataset.tab){setTab(el.dataset.tab);return;}
-  if(el.dataset.del!=null){S.t[S.tab].imgs.splice(+el.dataset.del,1);var o=$('#prof')&&$('#prof').open;renderForm();if(o&&$('#prof')){$('#prof').open=true;}queueSave();return;}
-  if(el.dataset.dlg){if(el.dataset.dlg==='ok'){clearTab();}else{closeDlg();}return;}
-  if('pvclose' in el.dataset){closePreview();return;}
-  var a=el.dataset.act;
-  if(a==='pdf'){exportPdf();}
-  else if(a==='ai'){aiFill();}
-  else if(a==='preview'){openPreview();}
-  else if(a==='copy'){copyText();}
-  else if(a==='demo'){demo();}
-  else if(a==='clear'){openDlg();}
+  var t=e.target.closest?e.target:e.target.parentNode;
+  var el;
+  if((el=t.closest('[data-act]'))){var f=ACTS[el.dataset.act];if(f){f();}return;}
+  if((el=t.closest('.vbtn[data-view]'))){goView(el.dataset.view);return;}
+  if((el=t.closest('[data-tab]'))){setTab(el.dataset.tab);return;}
+  if((el=t.closest('[data-cellai]'))){cellAI(el.dataset.cellai);return;}
+  if((el=t.closest('[data-students]'))){pickStudents(el.dataset.students);return;}
+  if((el=t.closest('[data-del]'))){
+    var r=rep();r.imgs.splice(+el.dataset.del,1);touch(r);renderAll(true);queueSave();return;
+  }
+  if((el=t.closest('[data-open]'))){openReport(el.dataset.open);return;}
+  if((el=t.closest('[data-dup]'))){
+    var from=S.reports[el.dataset.dup];if(!from){return;}
+    newReport(from.type,from);S.tab=from.type;S.view='edit';renderAll();queueSave();window.scrollTo({top:0});
+    toast('نُسخ كتقرير جديد، عدّل التاريخ والتفاصيل.');return;
+  }
+  if((el=t.closest('[data-delrep]'))){
+    var id=el.dataset.delrep;
+    openDlg({title:'حذف هذا التقرير؟',text:'سيُحذف من الأرشيف نهائيًا.',ok:'حذف التقرير',onOk:function(){
+      var x=S.reports[id];if(x){removeReport(x);}closeDlg();renderView();queueSave();toast('تم حذف التقرير.');
+    }});return;
+  }
+  if((el=t.closest('[data-identdel]'))){
+    prof()[el.dataset.identdel]='';touchProfile();renderView();queueSave();return;
+  }
+  if((el=t.closest('[data-sync]'))){syncAction(el.dataset.sync);return;}
+  if((el=t.closest('[data-dlg]'))){
+    if(el.dataset.dlg==='ok'){var a=dlgAction;if(a){a();}}else{closeDlg();}
+    return;
+  }
+  if((el=t.closest('[data-pick]'))){var pa=pickAction,pid=el.dataset.pick;closePicker();if(pa){pa(pid);}return;}
+  if(t.closest('[data-pickclose]')){closePicker();return;}
+  if(t.closest('#pickOk')){
+    var ids=$$('#pickBody input:checked').map(function(c){return c.value;}),pb=pickAction;
+    closePicker();if(pb&&ids.length){pb(ids);}return;
+  }
+  if(t.closest('[data-sharenow]')){
+    var sh=pendingShare;pendingShare=null;closePicker();
+    if(sh){navigator.share(sh).catch(function(){});}
+    return;
+  }
+  if(t.closest('[data-pvclose]')){closePreview();return;}
+  if(t.classList&&t.classList.contains('overlay')){
+    if(t.id==='dlg'){closeDlg();}else if(t.id==='pick'){closePicker();}else if(t.id==='pv'){closePreview();}
+  }
 });
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape'){return;}
-  if(!$('#dlg').hidden){closeDlg();}
-  else if(!$('#pv').hidden){closePreview();}
+  if(!$('#dlg').hidden){closeDlg();}else if(!$('#pick').hidden){closePicker();}else if(!$('#pv').hidden){closePreview();}
+});
+
+var aTimer=null;
+document.addEventListener('input',function(e){
+  var el=e.target;
+  if(el.dataset&&el.dataset.s){
+    var k=el.dataset.k;
+    if(el.dataset.s==='p'){prof().p[k]=el.value;touchProfile();}
+    else{var r=rep();r.v[k]=el.value;touch(r);updateMeta();}
+    queueSave();return;
+  }
+  if(el.id==='pname'){prof().name=el.value;touchProfile();renderChrome();queueSave();return;}
+  if(el.id==='stuList'){
+    var seen={},list=[];
+    el.value.split(/\n/).forEach(function(x){x=x.trim();if(x&&!seen[x]){seen[x]=1;list.push(x);}});
+    prof().students=list;touchProfile();$('#stuCount').textContent=list.length+' طالب';queueSave();return;
+  }
+  if(el.id==='aq'){
+    A.q=el.value;A.n=30;
+    clearTimeout(aTimer);
+    aTimer=setTimeout(function(){
+      var pos=el.selectionStart;renderView();
+      var n=$('#aq');if(n){n.focus();try{n.setSelectionRange(pos,pos);}catch(x){}}
+    },200);
+  }
+});
+document.addEventListener('change',function(e){
+  var el=e.target;
+  if(el.id==='profSel'){S.pid=el.value;renderAll();queueSave();window.scrollTo({top:0});return;}
+  if(el.id==='at'){A.type=el.value;A.n=30;renderView();return;}
+  if(el.dataset&&el.dataset.s==='p'){renderChrome();return;}
+  if(el.id==='imgFile'){if(el.files.length){addImages(el.files);}el.value='';return;}
+  if(el.id==='bookFile'){if(el.files[0]){bookRead(el.files[0]);}el.value='';return;}
+  if(el.id==='restoreFile'){if(el.files[0]){restore(el.files[0]);}el.value='';return;}
+  if(el.dataset&&el.dataset.ident){if(el.files[0]){setIdent(el.dataset.ident,el.files[0]);}el.value='';}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.id==='syncJoin'){e.preventDefault();syncAction('join');}
 });
 window.addEventListener('resize',function(){if(!$('#pv').hidden){layoutPreview();}});
+window.addEventListener('pagehide',function(){saveNow();});
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='hidden'){saveNow();}
+  else if(SY.code&&Date.now()-SY.last>60000){syncNow();}
+});
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();deferredInstall=e;
+  if(S.view==='settings'){renderView();}
+});
+window.addEventListener('appinstalled',function(){deferredInstall=null;if(S.view==='settings'){renderView();}});
 
-load();
-['daily','weekly','monthly'].forEach(function(x){$('#tab-'+x).setAttribute('aria-selected',x===S.tab?'true':'false');});
-$('#form').setAttribute('aria-labelledby','tab-'+S.tab);
-renderForm();
+/* ---------- start ---------- */
+(async function init(){
+  await loadState();
+  await loadSync();
+  renderAll();
+  if(SY.code){syncNow();}
+  if('serviceWorker' in navigator&&location.protocol==='https:'&&/github\.io$/.test(location.hostname)){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+})();
+
 })();
 </script>
 </body>
