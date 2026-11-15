@@ -5,7 +5,7 @@
 const ALLOWED_ORIGINS = ['https://salmilabi.github.io'];
 const MODEL = 'claude-haiku-5-5';
 const MAX_PROMPT_CHARS = 3000;
-const MAX_OUTPUT_TOKENS = 900;
+const MAX_OUTPUT_TOKENS = 1500;
 
 function corsHeaders(origin) {
   return {
@@ -63,6 +63,9 @@ export default {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_OUTPUT_TOKENS,
+        // Haiku 5.5 thinks by default and thinking tokens count toward max_tokens,
+        // so a short budget can end with no text at all. Turn thinking off for this simple task.
+        thinking: { type: 'disabled' },
         messages: [{ role: 'user', content: prompt }],
       }),
     });
@@ -75,6 +78,9 @@ export default {
       .filter((b) => b.type === 'text')
       .map((b) => b.text)
       .join('');
+    if (!text) {
+      return reply({ error: 'empty_answer' }, 502, headers);
+    }
     return reply({ text }, 200, headers);
   },
 };
